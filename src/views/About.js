@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
 
-import './style.css';
+import '../css/about.css';
 
 export default class About extends Component {
   render() {

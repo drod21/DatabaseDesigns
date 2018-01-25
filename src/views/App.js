@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import logo from './logo.svg';
-import './style.css';
+import '../css/app.css';
 
 class App extends Component {
-
   render() {
-    const { className, ...props } = this.props;
     return (
-      <div className={classnames('App', className)} {...props}>
+      <div>
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React - Fullstack!</h2>
