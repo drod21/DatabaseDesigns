@@ -1,14 +1,78 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
+
+
+
 
 class Anthony extends Component
 {
-    render() {
-        return(
-            <h3>I am Anthony</h3>
+    
+        
+        state = {
+                 nameInput: '',
+                 passwordInput:''
+        }
+    
 
-        )
+    handleChangeName= (event) => {
+        this.setState({ nameInput: event.target.value })
+    }
+
+    handleChangePassword= (event) => {
+        this.setState({ passwordInput: event.target.value })
+    }
+
+
+
+
+    render() {
+
+        const {input,submit,wrapper} = styles
+        return(
+            <div className='input-container' style={wrapper}>
+            <div className='userinput' style={input}>
+             <TextField
+                id="nameInput"
+                label="Username"
+                value={this.state.nameInput}
+                onChange={this.handleChangeName}
+                margin="normal"
+             />
+             <TextField
+                id="passwordInput"
+                label="Password"
+                value={this.state.passwordInput}
+                onChange={this.handleChangePassword}
+                margin="normal"
+             />
+             </div>
+            
+             <div className='submitbutton' style={submit}>
+             <Button color="contrast" onClick={this.handleSubmition}>Submit</Button>
+             </div>
+
+             
+             
+             
+             </div>   
+             )
     }
 }
+
+
+const styles = {
+    wrapper:{
+        alignItems: 'center',
+        display: 'flex',
+        flexFlow:'column'
+    },
+    input: {background: 'white',
+               color: 'black'},
+    submit: {color: 'black'}
+}
+
 
 
 export default Anthony
