@@ -29,10 +29,10 @@ class Anthony extends Component
 
     render() {
 
-        const {input,submit,wrapper} = styles
+        const {nameinput,passwordinput,submit,wrapper} = styles
         return(
             <div className='input-container' style={wrapper}>
-            <div className='userinput' style={input}>
+            <div className='userinput' style={nameinput}>
              <TextField
                 id="nameInput"
                 label="Username"
@@ -40,6 +40,9 @@ class Anthony extends Component
                 onChange={this.handleChangeName}
                 margin="normal"
              />
+             </div>
+
+            <div className='password-container' style={passwordinput}>
              <TextField
                 id="passwordInput"
                 label="Password"
@@ -48,7 +51,9 @@ class Anthony extends Component
                 margin="normal"
              />
              </div>
-            
+
+
+
              <div className='submitbutton' style={submit}>
              <Button color="contrast" onClick={this.handleSubmition}>Submit</Button>
              </div>
@@ -68,8 +73,10 @@ const styles = {
         display: 'flex',
         flexFlow:'column'
     },
-    input: {background: 'white',
+    nameinput: {background: 'white',
                color: 'black'},
+    passwordinput:{background:'white',
+                    color:'black'},
     submit: {color: 'black'}
 }
 
