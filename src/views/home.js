@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types'
 
 import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
-import Toolbar from 'material-ui/Toolbar';
+
 
 class Home extends Component {
   constructor() {
@@ -45,7 +45,8 @@ class Home extends Component {
           <Button color="contrast" onClick={this.handleSearch}>Search</Button>
         </div>
         <div className='login'>
-          <Button color="contrast">Login</Button>
+          <h3>Employees can login</h3>
+          <Button color="contrast" onClick={() => this.context.router.history.push('/login')}>Login</Button>
         </div>
       </div>
     );
@@ -67,6 +68,10 @@ const styles = {
     padding: '3px 10px',
     width: '300px'
   }
+}
+
+Home.contextTypes = {
+  router: PropTypes.object.isRequired
 }
 
 export default Home
