@@ -38,6 +38,7 @@ class Login extends Component {
                     <TextField
                         id="passwordInput"
                         label="Password"
+                        type="password"
                         value={this.state.passwordInput}
                         onChange={this.handleChangePassword}
                         margin="normal"
