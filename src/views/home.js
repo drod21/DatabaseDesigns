@@ -8,7 +8,6 @@ import TextField from 'material-ui/TextField';
 
 import Header from './header'
 
-
 class Home extends Component {
   constructor() {
     super();

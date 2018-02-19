@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Header from './header'
 
 class Login extends Component {
     constructor() {
@@ -21,10 +22,10 @@ class Login extends Component {
     }
 
     render() {
-
         const { nameInput, passwordInput, submit, wrapper } = styles
         return(
             <div className='input-container' style={wrapper}>
+                <Header />
                 <div className='userinput' style={nameInput}>
                     <TextField
                         id="nameInput"
