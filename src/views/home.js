@@ -6,6 +6,8 @@ import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 
+import Header from './header'
+
 
 class Home extends Component {
   constructor() {
@@ -27,6 +29,7 @@ class Home extends Component {
     const { icon, text, home } = styles
     return(
       <div className='home-container' style={home}>
+        <Header/>
         <div className='search-bar'>
           <IconButton onClick={this.handleSearch}>
             <Icon className='material-icons' style={icon}>search</Icon>

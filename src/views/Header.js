@@ -1,30 +1,33 @@
-import Button from 'material-ui/Button';
 import React, { Component } from 'react';
-
+import Button from 'material-ui/Button';
+import PropTypes from 'prop-types'
 
 
 
 class Header extends Component {
-
-    render(){
+    render() {
         const{head} = styles
-        return(
+        return (
             <div className= 'head' style={head}>
-                    <Button color="contrast" onClick={() => this.context.router.history.push('/login')}>Login</Button>
-                    <Button color ="contrast" onClick={() => this.context.router.history.push('/home')}>Home</Button>   
+                <Button color ="contrast" onClick={() => this.context.router.history.push('/home')}>Home</Button>   
+                <Button color="contrast" onClick={() => this.context.router.history.push('/login')}>Login</Button>
             </div>
-
-              )
-            }       
-                              }
+        )
+    }       
+}
 
 const styles = {
-
     head: {
-        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'grey',
         display: 'flex',
-        flexFlow: 'column'
-          }
+        margin: '15px 0',
+        width: '100%'
+    }
+}
+
+Header.contextTypes = {
+    router: PropTypes.object.isRequired
 }
 
 
