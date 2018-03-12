@@ -34,6 +34,13 @@ const seedReviews = () => db.Promise.map([
  {rating: 4, review_text: "just like description",product_id:1}
  ], review => db.model('reviews').create(review));
 
+ const seedDepartments = () => db.Promise.map([
+   { dept_id: 23, name: 'Electronics' },
+   { dept_id: 26, name: 'Home Goods' },
+   { dept_id: 21, name: 'Games' },
+   { dept_id: 25, name: 'Movies' },
+ ], department => db.model('departments').create(department));
+ 
  db.didSync
    .then(() => db.sync({force: true}))
    .then(seedProducts)

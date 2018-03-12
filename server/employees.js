@@ -6,9 +6,7 @@ const Employees = require('../db/models/employees');
 const router = require('express').Router();
 
 router.get('/', function (req, res, next) {
-    Employees.findAll({
-        include: [Inventory]
-    })
+    Employees.findAll()
         .then(result => {
             res.status(200).send(result);
         })
