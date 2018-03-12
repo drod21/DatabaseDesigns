@@ -5,10 +5,7 @@ const Inventory = require('../db/models/inventory');
 const router = require('express').Router()
 
 router.get('/', function(req, res, next) {
-    Items.findAll({
-            include: [Inventory]
-        })
-        .then(result => {
+    Items.findAll().then(result => {
             res.status(200).send(result);
         })
         .catch(next);
@@ -17,12 +14,18 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
     Items.findOne({
             where:{id:req.params.id},
-            include: [Inventory]
-        })
-        .then(result => {
+        }).then(result => {
             res.status(200).send(result);
-        })
-        .catch(next);
+        }).catch(next);
 });
+
+router.put('/:id', function(req, res, next) {
+    Items.findOne({
+        where: { id: req.params.id, dept_id: req.body.dept_id }
+        .then((result) => {
+            res.status(200).send(result);
+        }).catch(next)
+    })
+})
 
 module.exports = router;

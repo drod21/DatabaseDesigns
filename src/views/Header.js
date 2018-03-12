@@ -1,28 +1,35 @@
 import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import PropTypes from 'prop-types'
-
-
+import { Link } from 'react-router-dom'
 
 class Header extends Component {
     render() {
-        const{head} = styles
+        const { header, headerLinks } = styles
         return (
-            <div className= 'head' style={head}>
-                <Button color ="contrast" onClick={() => this.context.router.history.push('/home')}>Home</Button>   
-                <Button color="contrast" onClick={() => this.context.router.history.push('/login')}>Login</Button>
+            <div className='header' style={header}>
+                <Link to='/' style={headerLinks}>Home</Link>
+                <Link to='/login' style={headerLinks}>Login</Link>
             </div>
         )
     }       
 }
 
 const styles = {
-    head: {
+    header: {
+        alignItems: 'center',
         justifyContent: 'center',
         background: 'grey',
+        height: '50px',
         display: 'flex',
-        margin: '15px 0',
         width: '100%'
+    },
+    headerLinks: {
+        border: '1px solid white',
+        color: 'white',
+        margin: '25px',
+        padding: '5px 10px',
+        textDecoration: 'none'
     }
 }
 
