@@ -1,14 +1,17 @@
 'use strict';
 
-const Inventory = require('./inventory');
+const Managers = require('./managers');
 const Items = require('./items');
 const Employees = require('./employees');
 const Departments = require('./departments');
 
-Inventory.hasMany(Items);
-Items.belongsTo(Inventory);
-Inventory.belongsTo(Employees);
-Employees.hasOne(Departments);
 Departments.hasMany(Employees);
+Departments.hasMany(Items);
+Departments.hasOne(Managers);
+Employees.hasOne(Departments);
+Employees.hasOne(Managers)
+Items.hasOne(Depatments);
+Managers.hasMany(Employees);
+Managers.hasOne(Deparments);
 
-module.exports = { Inventory, Items, Employees, Departments };
+module.exports = { Managers, Items, Employees, Departments };

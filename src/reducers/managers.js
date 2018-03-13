@@ -1,4 +1,4 @@
-export default function inventory(state={}, action) {
+export default function managers(state={}, action) {
   switch(action.type) {
     default: break
   }

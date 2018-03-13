@@ -1,6 +1,6 @@
 const api = module.exports = require('express').Router()
 const items = require('./items');
-const inventory = require('./inventory');
+const managers = require('./managers');
 const employees = require('./employees');
 const departments = require('./department');
 // import products from './products';
@@ -10,8 +10,8 @@ api
   .get('/items/:id', items)
   .get('/departments', departments)
   .get('/departments/:id', departments)
-  .get('/inventory', inventory)
-  .get('/inventory/:id', inventory)
+  .get('/managers', managers)
+  .get('/managers/:id', managers)
   .get('/employees', employees)
   .get('/employees/:id', employees)
 

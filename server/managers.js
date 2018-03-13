@@ -1,13 +1,11 @@
 const db = require('../db') //this is required
-const Inventory = require('../db/models/inventory');
-const Items = require('../db/models/items');
+const Managers = require('../db/models/managers');
+const Employees = require('../db/models/employees');
 
 const router = require('express').Router()
 
 router.get('/', function(req, res, next) {
-    Inventory.findAll({
-            include: [Items]
-        })
+    Managers.findAll()
         .then(result => {
             res.status(200).send(result);
         })
@@ -15,9 +13,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-    Inventory.findOne({
+    Managers.findOne({
             where:{id:req.params.id},
-            include: [Items]
+            include: [Employees]
         })
         .then(result => {
             res.status(200).send(result);
