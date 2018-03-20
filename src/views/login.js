@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Header from './header';
-import { login } from '../actions/employees';
+import { login } from '../actions/auth';
 class Login extends Component {
     constructor(props) {
         super(props)
@@ -20,7 +20,11 @@ class Login extends Component {
     }
 
     handleSubmit = () => {
-        this.props.login(this.state.emailInput, this.state.passwordInput)
+        this.props.login(this.state.emailInput, this.state.passwordInput).then((res) => {
+            window.localStorage.setItem('jwt', res.token); 
+        })
+
+        
     }
 
     render() {
@@ -75,6 +79,7 @@ const styles = {
 function mapStateToProps(state) {
     console.log(state)
     return {
+        token: state.auth.token,
         employees: state.employees,
         items: state.items
     }

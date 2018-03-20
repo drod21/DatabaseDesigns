@@ -7,3 +7,10 @@ export function getItems() {
     .catch((err) => dispatch({ type: 'RETRIEVE_ALL_ITEMS_FAILED', error: err }))
   }
 }
+
+export function addItem(item) {
+  return {
+    type: 'ADD_ITEM',
+    newItem: axios.put('/api/items/', { item })
+  }
+}

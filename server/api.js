@@ -9,6 +9,7 @@ api
   .get('/express-test', (req, res) => res.send({express: 'working!'})) //demo route to prove api is working
   .get('/items', items)
   .get('/items/:id', items)
+  .put('items', items)
   .get('/departments', departments)
   .get('/departments/:id', departments)
   .get('/managers', managers)

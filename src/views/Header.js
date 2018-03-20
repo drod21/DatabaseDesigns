@@ -11,6 +11,7 @@ class Header extends Component {
                 <Link to='/' style={headerLinks}>Home</Link>
                 <Link to='/items' style={headerLinks}>Items</Link>
                 <Link to='/login' style={headerLinks}>Login</Link>
+                <Link to='/dashboard' style={headerLinks}>Dashboard</Link>
             </div>
         )
     }       
