@@ -5,13 +5,9 @@ const Items = require('./items');
 const Employees = require('./employees');
 const Departments = require('./departments');
 
-Departments.hasMany(Employees);
-Departments.hasMany(Items);
-Departments.hasOne(Managers);
-Employees.hasOne(Departments);
-Employees.hasOne(Managers)
-Items.hasOne(Depatments);
-Managers.hasMany(Employees);
-Managers.hasOne(Deparments);
+Employees.hasMany(Departments);
+Employees.hasMany(Managers)
+Items.hasOne(Departments);
+Managers.hasOne(Departments);
 
 module.exports = { Managers, Items, Employees, Departments };

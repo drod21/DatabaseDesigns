@@ -9,6 +9,7 @@ class Header extends Component {
         return (
             <div className='header' style={header}>
                 <Link to='/' style={headerLinks}>Home</Link>
+                <Link to='/items' style={headerLinks}>Items</Link>
                 <Link to='/login' style={headerLinks}>Login</Link>
             </div>
         )

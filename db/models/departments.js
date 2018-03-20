@@ -3,7 +3,7 @@
 const Sequelize = require('sequelize');
 const db = require('../index.js');
 
-const Departments = db.define('departments', {
+const Departments = db.define('Departments', {
   dept_id: {
     type: Sequelize.INTEGER,
     allowNull: false,
