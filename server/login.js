@@ -10,8 +10,15 @@ router.put('/login', function (req, res, next) {
   }).then(result => {
     console.log(result)
     const hash = crypto.createHash('md5').update(req.body.password).digest('hex');
-    if(hash == result.password)
-      res.status(200).send(result);
+    const emp = Object.assign({}, {
+      eid: result.eid,
+      name: result.emp_name,
+      dept: result.dept_id,
+      managerId: result.manager_id,
+      email: result.email
+    })
+    if(hash == result.emp_pw)
+      res.status(200).send(emp);
     else
       res.status(401).send('Invalid login')
   }).catch(next);

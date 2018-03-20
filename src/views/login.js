@@ -1,37 +1,39 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
-import Header from './header'
-
+import Header from './header';
+import { login } from '../actions/employees';
 class Login extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
-            nameInput: '',
+            emailInput: '',
             passwordInput:''
         }
     }
 
-    handleChangeName = (event) => {
-        this.setState({ nameInput: event.target.value })
+    handleChangeText = (event) => {
+        this.setState({ [event.target.id]: event.target.value })
     }
 
-    handleChangePassword = (event) => {
-        this.setState({ passwordInput: event.target.value })
+    handleSubmit = () => {
+        this.props.login(this.state.emailInput, this.state.passwordInput)
     }
 
     render() {
-        const { nameInput, passwordInput, submit, wrapper } = styles
+        const { emailInput, passwordInput, submit, wrapper } = styles
         return(
             <div className='input-container' style={wrapper}>
                 <Header />
-                <div className='userinput' style={nameInput}>
+                <div className='userinput' style={emailInput}>
                     <TextField
-                        id="nameInput"
-                        label="Username"
-                        value={this.state.nameInput}
-                        onChange={this.handleChangeName}
+                        id="emailInput"
+                        label="Employee Email"
+                        value={this.state.emailInput}
+                        onChange={this.handleChangeText}
                         margin="normal"
                     />
                 </div>
@@ -41,12 +43,12 @@ class Login extends Component {
                         label="Password"
                         type="password"
                         value={this.state.passwordInput}
-                        onChange={this.handleChangePassword}
+                        onChange={this.handleChangeText}
                         margin="normal"
                     />
                 </div>
                 <div className='submitbutton' style={submit}>
-                    <Button color="contrast" onClick={this.handleSubmition}>Submit</Button>
+                    <Button color="contrast" onClick={this.handleSubmit}>Submit</Button>
                 </div>
             </div>   
         )
@@ -59,7 +61,7 @@ const styles = {
         display: 'flex',
         flexFlow:'column'
     },
-    nameInput: {
+    emailInput: {
         background: 'white',
         color: 'black'
     },
@@ -70,4 +72,16 @@ const styles = {
     submit: { color: 'black' }
 }
 
-export default Login
+function mapStateToProps(state) {
+    console.log(state)
+    return {
+        employees: state.employees,
+        items: state.items
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ login }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
