@@ -4,6 +4,9 @@ import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import { addItem, getItems } from '../actions/items'
+import Header from './header'
 /*
 item = { 
     id,
@@ -23,19 +26,174 @@ function getRandomInt(max) {
 }
 
 class Dashboard extends Component {
-constructor(props) {
-  super(props)
-  this.state = {
-    id: getRandomInt(927)
+  constructor(props) {
+    super(props)
+    this.state = {
+      item_name: '',
+      dept: '',
+      type: '',
+      description: '',
+      price_public: '',
+      price_private: '',
+      addNewItem: false
+    }
+    this.props.getItems()
+  }
+
+  handlePress = (e) => {
+    this.setState({ addNewItem: !this.state.addNewItem })
+  }
+
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  handleSubmit = () => {
+    const { item_name, dept, type, description, price_public, price_private } = this.state
+    const deptMap = { 'Electronics': 23, 'Home Goods': 26, 'Video Games': 21, 'Movies': 25 }
+    const utcDate = new Date()
+    const date = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate())
+    const dept_id = deptMap[dept]
+    const item = {
+      id: getRandomInt(927),
+      item_name,
+      dept_id,
+      type,
+      description,
+      price_public,
+      price_private,
+      created_at: date,
+      updated_at: date
+    }
+    this.props.addItem(item)
+  }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if(nextProps !== this.props)
+  //     this.props.getItems()
+  // }
+
+render() {
+  const { icon, text, home } = styles
+  const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
+    return (
+      <div className='home-container' style={home}>
+        <Header />
+        <Table>
+          <TableHead>
+            <TableRow style={{ height: 25 }}>
+              <TableCell style={{ textAlign: 'center', padding: 0 }}>Item Name</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: 0 }}>Description</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: 0 }}>Type</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: 0 }}>Department</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: 0 }}>Public Price</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: 0 }}>Sale Price</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {(!this.props.items.isLoading) && this.props.items.map((item, index) =>
+              <TableRow style={{ height: 25 }} key={index}>
+                <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.type) ? item.type : '-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.dept_id) ? deptMap[item.dept_id] : '-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public.toFixed(2) : '$-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_private) ? '$' + item.price_private.toFixed(2) : '$-'}</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+        <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handlePress}>
+          Add New Item
+        </Button>
+
+        {(this.state.addNewItem) &&
+          (<div>
+          <TextField className='add-field'
+              name='item_name'
+              value={this.state.item_name}
+              placeholder='Item Name'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+          />
+          <TextField className='add-field'
+              name='dept'
+              value={this.state.dept}
+              placeholder='Department'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+          /> 
+          <TextField className='add-field'
+              name='type'
+              value={this.state.type}
+              placeholder='Type'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+          />
+          <TextField className='add-field'
+              name='description'
+              value={this.state.description}
+              placeholder='Description'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+          />
+          <TextField className='add-field'
+            name='price_public'
+            value={this.state.price_public}
+            placeholder='Price'
+            onChange={this.handleChange}
+            InputProps={{
+              disableUnderline: true
+            }}
+            style={text}
+          />
+          <TextField className='add-field'
+            name='price_private'
+            value={this.state.price_private}
+            placeholder='Sale Price'
+            onChange={this.handleChange}
+            InputProps={{
+              disableUnderline: true
+            }}
+            style={text}
+          />
+            <Button className='submit-new-item-button' onClick={this.handleSubmit}>
+              Submit
+            </Button>
+          </div>)
+        }
+      </div>
+    );
   }
 }
 
-render() {
-  return(
-    <div>
-    </div>
-  )
-}
+const styles = {
+  icon: { color: 'black' },
+  home: {
+    alignItems: 'center',
+    display: 'flex',
+    flexFlow: 'column'
+  },
+  text: {
+    background: 'white',
+    borderRadius: '3px',
+    color: 'white',
+    margin: '0px 10px',
+    padding: '3px 10px',
+    width: '300px'
+  }
 }
 
 function mapStateToProps(state) {
@@ -45,7 +203,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addItem }, dispatch);
+  return bindActionCreators({ addItem, getItems }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

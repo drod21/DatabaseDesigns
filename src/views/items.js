@@ -19,10 +19,10 @@ class Items extends Component {
     this.props.getItems()
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps !== this.props)
-      this.props.getItems()
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if(nextProps !== this.props)
+  //     this.props.getItems()
+  // }
 
   handleChange = (e) => {
     this.setState({ searchInput: e.target.value })
