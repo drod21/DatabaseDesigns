@@ -19,12 +19,20 @@ class Login extends Component {
         this.setState({ [event.target.id]: event.target.value })
     }
 
-    handleSubmit = () => {
-        this.props.login(this.state.emailInput, this.state.passwordInput).then((res) => {
-            window.localStorage.setItem('jwt', res.token); 
-        })
+    handleKeyPress = (e) => {
+        if(e.key === 'Enter')
+            this.handleSubmit();
+    }
 
-        
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.token && this.props !== nextProps) {
+            window.localStorage.setItem('jwt', nextProps.token); 
+            this.context.router.history.push('/dashboard')
+        }
+    }
+
+    handleSubmit = () => {
+        this.props.login(this.state.emailInput, this.state.passwordInput)
     }
 
     render() {
@@ -48,6 +56,7 @@ class Login extends Component {
                         type="password"
                         value={this.state.passwordInput}
                         onChange={this.handleChangeText}
+                        onKeyPress={this.handleKeyPress}
                         margin="normal"
                     />
                 </div>
@@ -76,8 +85,11 @@ const styles = {
     submit: { color: 'black' }
 }
 
+Login.contextTypes = {
+    router: PropTypes.object.isRequired
+}
+
 function mapStateToProps(state) {
-    console.log(state)
     return {
         token: state.auth.token,
         employees: state.employees,
