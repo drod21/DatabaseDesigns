@@ -1,9 +1,20 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Button from 'material-ui/Button';
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-class Header extends Component {
+class Header extends PureComponent {
+    constructor(props) {
+        super(props)
+        const token = window.localStorage.getItem('jwt'); 
+        this.state = { isLoggedIn: (token) ? true : false }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const token = window.localStorage.getItem('jwt'); 
+        this.setState({ isLoggedIn: (token) ? true : false })
+    }
+
     render() {
         const { header, headerLinks } = styles
         return (
@@ -11,7 +22,7 @@ class Header extends Component {
                 <Link to='/' style={headerLinks}>Home</Link>
                 <Link to='/items' style={headerLinks}>Items</Link>
                 <Link to='/login' style={headerLinks}>Login</Link>
-                <Link to='/dashboard' style={headerLinks}>Dashboard</Link>
+                {(this.state.isLoggedIn) && <Link to='/dashboard' style={headerLinks}>Dashboard</Link>}
             </div>
         )
     }       
