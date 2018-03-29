@@ -1,10 +1,10 @@
 const db = require('../db') 
-const Employees = require('../db/models/employees');
+const Departments = require('../db/models/departments');
 
 const router = require('express').Router();
 
 router.get('/', function (req, res, next) {
-  Department.findAll()
+  Departments.findAll()
     .then(result => {
       res.status(200).send(result);
     })
@@ -12,7 +12,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/:id', function (req, res, next) {
-  Department.findOne({
+  Departments.findOne({
     where: { dept_id: req.params.id }
   })
     .then(result => {

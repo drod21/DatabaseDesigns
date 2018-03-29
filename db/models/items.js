@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 const db = require('../index.js');
 
 const Items = db.define('Items', {
-  id: {
+  item_id: {
     type: Sequelize.INTEGER,
     primaryKey: true
   },
@@ -12,14 +12,10 @@ const Items = db.define('Items', {
     type: Sequelize.TEXT,
     allowNull: false
   },
-  dept_id: {
-    type: Sequelize.INTEGER,
-    allowNull: false
-  },
   type: Sequelize.TEXT,
   description: Sequelize.TEXT,
   price_public: {
-    type: Sequelize.INTEGER,
+    type: Sequelize["DOUBLE PRECISION"],
     allowNull: false
   },
 	price_private: Sequelize["DOUBLE PRECISION"]

@@ -12,8 +12,6 @@ const Employees = db.define('Employees', {
     email: Sequelize.TEXT,
     emp_name: Sequelize.TEXT,
     emp_pw: Sequelize.TEXT,
-    dept_id: Sequelize.INTEGER,
-    manager_id: Sequelize.INTEGER
 });
 
 module.exports = Employees;
