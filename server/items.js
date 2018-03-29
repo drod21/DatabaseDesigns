@@ -19,21 +19,12 @@ router.get('/items/:id', function(req, res, next) {
         }).catch(next);
 });
 
-router.put('/items/:id', function(req, res, next) {
-    const item = Object.assign({}, {
-        item_id: res.body.item_id,
-        type: res.body.type,
-        description: res.body.description,
-        name: res.body.name,
-        price_public: res.body.price_public,
-        price_private: res.body.price_private,
-        created_at: res.body.created_at,
-        updated_at: res.body.updated_at
-    })
-
+router.put('/items', function(req, res, next) {
+    const item = req.body.item
+    
     const sold = Object.assign({}, {
         item_item_id: item.item_id,
-        department_dept_id: res.body.dept_id
+        department_dept_id: item.dept_id
     })
 
     Items.create(item).then((result) => {
