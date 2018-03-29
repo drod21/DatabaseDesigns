@@ -12,7 +12,7 @@ router.put('/login', function (req, res, next) {
   }).then((result) => {
     const hash = crypto.createHash('md5').update(req.body.password).digest('hex');
     const token = Object.assign({}, {
-      token: jwt.sign({ emp_id: result.emp_id, role: 'user' }, KEY, { expiresIn: '5 days' })
+      token: jwt.sign({ emp_id: result.emp_id, role: 'employee' }, KEY, { expiresIn: '5 days' })
     })
     console.log(token.token)
     if(hash == result.emp_pw)

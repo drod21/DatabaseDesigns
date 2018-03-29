@@ -55,10 +55,10 @@ class Dashboard extends Component {
     const date = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate())
     const dept_id = deptMap[dept]
     const item = {
-      id: getRandomInt(927),
+      item_id: getRandomInt(927),
       item_name,
-      dept_id,
       type,
+      dept_id,
       description,
       price_public,
       price_private,
@@ -96,7 +96,7 @@ render() {
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.type) ? item.type : '-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.dept_id) ? deptMap[item.dept_id] : '-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIns[0].department_dept_id) ? deptMap[item.SoldIns[0].department_dept_id] : '-'}</TableCell>
                 <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public.toFixed(2) : '$-'}</TableCell>
                 <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_private) ? '$' + item.price_private.toFixed(2) : '$-'}</TableCell>
               </TableRow>

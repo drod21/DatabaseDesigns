@@ -19,10 +19,10 @@ class Items extends Component {
     this.props.getItems()
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if(nextProps !== this.props)
-  //     this.props.getItems()
-  // }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps !== this.props)
+      this.props.getItems()
+  }
 
   handleChange = (e) => {
     this.setState({ searchInput: e.target.value })
@@ -53,7 +53,7 @@ class Items extends Component {
               <TableRow style={{ height: 25 }} key={index}>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.dept_id) ? deptMap[item.dept_id] : '-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIns[0].department_dept_id) ? deptMap[item.SoldIns[0].department_dept_id] : '-'}</TableCell>
                 <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public : '$-'}</TableCell>
               </TableRow>
             )}
