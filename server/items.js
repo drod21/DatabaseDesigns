@@ -55,10 +55,10 @@ item = {
     updated_at
 }
 */
-router.put('/items', function (req, res, next) {
-    Items.upsert(req.body.item).then((result) => {
-        res.status(200).send(result);
-    }).catch(next)
-})
+// router.put('/items', function (req, res, next) {
+//     Items.upsert(req.body.item).then((result) => {
+//         res.status(200).send(result);
+//     }).catch(next)
+// })
 
 module.exports = router;
