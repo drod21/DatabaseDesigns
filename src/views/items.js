@@ -8,6 +8,7 @@ import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 import { getItems } from '../actions/items';
 import Header from './header';
+import Checkbox from 'material-ui/Checkbox';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
 class Items extends Component {
@@ -28,13 +29,17 @@ class Items extends Component {
     this.setState({ searchInput: e.target.value })
   }
 
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.checked });
+  };
+
   handleKeyPress = (e) => {
     if (e.key === 'Enter')
       this.handleSearch();
   }
 
   render() {
-    const { icon, text, home, ItemAttribute, Submit } = styles
+    const { icon, text, home, ItemAttribute, Submit, Edit } = styles
     const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
     return (
       <div className='home-container' style={home}>
@@ -86,6 +91,13 @@ class Items extends Component {
           margine = "normal" />
 
         </div>
+        <div classname = 'Editbutton' style = {Edit}>
+        <Checkbox
+          checked={this.state.checkedA}
+          onChange={this.handleChange('checkedA')}
+          value= 'this.props.items.map((item, index)'
+        />
+        </div>
         <div className = 'submitbutton' style={Submit}>
           <Button color="contrast" onClick = {this.handleSubmit}> Submit </Button>
         </div>
@@ -134,6 +146,9 @@ const styles = {
     color: 'black'
   },
   Submit: {
+    color: 'black'
+  },
+  Edit: {
     color: 'black'
   }
   

@@ -22,7 +22,8 @@ const Items = db.define('Items', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-	price_private: Sequelize["DOUBLE PRECISION"]
+  price_private: Sequelize["DOUBLE PRECISION"]
+  
 });
 
 module.exports = Items;
