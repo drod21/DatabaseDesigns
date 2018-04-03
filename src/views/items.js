@@ -8,7 +8,6 @@ import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
 import { getItems } from '../actions/items';
 import Header from './header';
-import Checkbox from 'material-ui/Checkbox';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
 class Items extends Component {
@@ -29,78 +28,17 @@ class Items extends Component {
     this.setState({ searchInput: e.target.value })
   }
 
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.checked });
-  };
-
   handleKeyPress = (e) => {
     if (e.key === 'Enter')
       this.handleSearch();
   }
 
   render() {
-    const { icon, text, home, ItemAttribute, Submit, Edit } = styles
+    const { icon, text, home } = styles
     const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
     return (
       <div className='home-container' style={home}>
         <Header />
-        <div className='iteminputtop' style = {ItemAttribute}>
-        <TextField
-          id = "ItemName"
-          label = "Name"
-          value = {this.state.ItemName}
-          onChange = {this.handleChangeText}
-          margin = "normal" />
-        <TextField 
-          id = "ItemId"
-          label = "Id"
-          value = {this.state.ItemId}
-          onChange = {this.handleChangeText}
-          margine = "normal" />
-        <TextField 
-          id = "DeptId"
-          label = "DId"
-          value = {this.state.DeptId}
-          onChange = {this.handleChangeText}
-          margine = "normal" />
-        <TextField 
-          id = "Type"
-          label = "Type"
-          value = {this.state.Type}
-          onChange = {this.handleChangeText}
-          margine = "normal" />
-        </div>
-        <div className='iteminputbottom' style = {ItemAttribute}>
-        <TextField 
-          id = "publicP"
-          label = "PricePublic"
-          value = {this.state.publicP}
-          onChange = {this.handleChangeText}
-          margine = "normal" />
-        <TextField 
-          id = "privateP"
-          label = "PricePrivate"
-          value = {this.state.privateP}
-          onChange = {this.handleChangeText}
-          margine = "normal" />
-        <TextField 
-          id = "Desc"
-          label = "Description"
-          value = {this.state.Desc}
-          onChange = {this.handleChangeText}
-          margine = "normal" />
-
-        </div>
-        <div classname = 'Editbutton' style = {Edit}>
-        <Checkbox
-          checked={this.state.checkedA}
-          onChange={this.handleChange('checkedA')}
-          value= 'this.props.items.map((item, index)'
-        />
-        </div>
-        <div className = 'submitbutton' style={Submit}>
-          <Button color="contrast" onClick = {this.handleSubmit}> Submit </Button>
-        </div>
         <Table>
           <TableHead>
             <TableRow style={{ height: 25 }}>
@@ -140,16 +78,6 @@ const styles = {
     margin: '0px 10px',
     padding: '3px 10px',
     width: '300px'
-  },
-  ItemAttribute: {
-    background: 'white',
-    color: 'black'
-  },
-  Submit: {
-    color: 'black'
-  },
-  Edit: {
-    color: 'black'
   }
 }
 
