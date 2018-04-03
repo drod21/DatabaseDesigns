@@ -4,8 +4,9 @@ import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Checkbox from 'material-ui/Checkbox';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import { addItem, getItems } from '../actions/items'
+import { addItem, getItems, } from '../actions/items'
 import Header from './header'
 /*
 item = { 
@@ -30,12 +31,15 @@ class Dashboard extends Component {
     super(props)
     this.state = {
       item_name: '',
+      item_id: getRandomInt(927),
       dept: '',
       type: '',
       description: '',
       price_public: '',
       price_private: '',
-      addNewItem: false
+      addNewItem: false,
+      checked: [],
+      disableCheckboxes: false,
     }
     this.props.getItems()
   }
@@ -48,14 +52,35 @@ class Dashboard extends Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  handleCheck = (name) => (event) => {
+    const checked = this.state.checked
+    const index = name
+    const item = this.props.items[index]
+    const dept = item.SoldIns[0].department_dept_id
+    const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
+    checked[index] = event.target.checked
+    
+    this.setState({ 
+      checked: checked, 
+      disableCheckboxes: true,
+      item_name: item.item_name,
+      item_id: item.item_id,
+      dept: deptMap[dept],
+      type: item.type,
+      description: item.description,
+      price_public: item.price_public,
+      price_private: item.price_private
+     })
+  }
+
   handleSubmit = () => {
-    const { item_name, dept, type, description, price_public, price_private } = this.state
+    const { item_name, dept, type, description, price_public, price_private, disableCheckboxes, addNewItem, item_id } = this.state
     const deptMap = { 'Electronics': 23, 'Home Goods': 26, 'Video Games': 21, 'Movies': 25 }
     const utcDate = new Date()
     const date = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate())
     const dept_id = deptMap[dept]
     const item = {
-      item_id: getRandomInt(927),
+      item_id,
       item_name,
       type,
       dept_id,
@@ -65,7 +90,29 @@ class Dashboard extends Component {
       created_at: date,
       updated_at: date
     }
-    this.props.addItem(item)
+
+
+    this.setState({
+      item_name: '',
+      item_id: getRandomInt(927),
+      dept: '',
+      type: '',
+      description: '',
+      price_public: '',
+      price_private: '',
+      addNewItem: false,
+      checked: [],
+      disableCheckboxes: false,
+    })
+    
+    if(addNewItem) {
+      this.props.addItem(item)
+      return
+    } 
+    
+    this.props.editItem(item)
+    
+    
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -93,6 +140,14 @@ render() {
           <TableBody>
             {(!this.props.items.isLoading) && this.props.items.map((item, index) =>
               <TableRow style={{ height: 25 }} key={index}>
+                <TableCell style={{ textAlign: 'center', padding: 0 }}>
+                  <Checkbox
+                    checked={this.state.checked[index]}
+                    onChange={this.handleCheck(index)}
+                    value={false}
+                    disabled={this.state.disableCheckboxes}
+                  />
+                </TableCell>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.type) ? item.type : '-'}</TableCell>
@@ -104,10 +159,10 @@ render() {
           </TableBody>
         </Table>
         <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handlePress}>
-          Add New Item
+          {(this.state.disableCheckboxes) ? 'Update Item ': 'Add New Item' }
         </Button>
 
-        {(this.state.addNewItem) &&
+        {(this.state.addNewItem || this.state.disableCheckboxes) &&
           (<div>
           <TextField className='add-field'
               name='item_name'
@@ -203,7 +258,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addItem, getItems }, dispatch);
+  return bindActionCreators({ addItem, getItems, }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
