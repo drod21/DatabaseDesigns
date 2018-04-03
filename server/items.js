@@ -12,14 +12,14 @@ router.get('/items', function(req, res, next) {
 
 router.get('/items/:id', function(req, res, next) {
     Items.findOne({
-            include: [SoldIn], 
-            where:{ item_id: req.params.id },
-        }).then((result) => {
-            res.status(200).send(result);
-        }).catch(next);
+        include: [SoldIn], 
+        where:{ item_id: req.params.id },
+    }).then((result) => {
+        res.status(200).send(result);
+    }).catch(next);
 });
 
-router.put('/items', function(req, res, next) {
+router.post('/items', function(req, res, next) {
     const item = req.body.item
     
     const sold = Object.assign({}, {
@@ -29,6 +29,21 @@ router.put('/items', function(req, res, next) {
 
     Items.create(item).then((result) => {
         return SoldIn.create(sold)
+    }).then((result) => {
+        res.status(200).send(result);
+    }).catch(next)
+})
+
+// TODO: FINISH THIS UP. It currently is not finished
+// We retrieve the item, need to update/overwrite the result with the item
+router.put('/items', function(req, res, next) {
+    const item = req.body.item
+    const sold = Object.assign({}, {
+        item_item_id: item.item_id,
+        department_dept_id: item.dept_id
+    })
+
+    Items.findOne({where : { item_id: item.item_id }}).then((result) => {
     }).then((result) => {
         res.status(200).send(result);
     }).catch(next)

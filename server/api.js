@@ -8,6 +8,7 @@ const departments = require('./department');
 api
   .get('/items', items)
   .get('/items/:id', items)
+  .post('/items', items)
   .put('/items', items)
   .get('/departments', departments)
   .get('/departments/:id', departments)

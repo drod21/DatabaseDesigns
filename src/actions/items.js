@@ -11,6 +11,13 @@ export function getItems() {
 export function addItem(item) {
   return {
     type: 'ADD_ITEM',
+    newItem: axios.post('/api/items/', { item })
+  }
+}
+
+export function editItem(item) {
+  return {
+    type: 'ADD_ITEM',
     newItem: axios.put('/api/items/', { item })
   }
 }
