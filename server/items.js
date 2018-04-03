@@ -33,9 +33,7 @@ router.post('/items', function(req, res, next) {
         res.status(200).send(result);
     }).catch(next)
 })
-
-// TODO: FINISH THIS UP. It currently is not finished
-// We retrieve the item, need to update/overwrite the result with the item
+// FINISHED
 router.put('/items', function(req, res, next) {
     const item = req.body.item
     const sold = Object.assign({}, {
@@ -43,10 +41,12 @@ router.put('/items', function(req, res, next) {
         department_dept_id: item.dept_id
     })
 
-    Items.findOne({where : { item_id: item.item_id }}).then((result) => {
+    Items.findOne({ where: { item_id: item.item_id }}).then((result) => {
+        const updatedItem = Object.assign(result, item)
+        return updatedItem.save()
     }).then((result) => {
         res.status(200).send(result);
-    }).catch(next)
+    }).catch((err) => console.log('error', err))
 })
 /*
 item = { 
