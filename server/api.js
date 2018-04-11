@@ -8,6 +8,8 @@ const departments = require('./department');
 api
   .get('/items', items)
   .get('/items/:id', items)
+  .get('/item-range/:key/:attribute/:op', items)
+  .get('/item-search/:key/:attribute', items)
   .post('/items', items)
   .put('/items', items)
   .get('/departments', departments)
