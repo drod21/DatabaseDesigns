@@ -10,6 +10,8 @@ export default function items(state=[], action) {
       break;
     case 'ADD_ITEM':
       state = [ ...state, action.newItem] 
+    case 'EDIT_ITEM':
+      state = [...state, ...action.items]
     default: break;
   }
   return state;

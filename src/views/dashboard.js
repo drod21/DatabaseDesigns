@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Checkbox from 'material-ui/Checkbox';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import { addItem, getItems, } from '../actions/items'
+import { addItem, getItems, editItem } from '../actions/items'
 import Header from './header'
 /*
 item = { 
@@ -40,8 +40,16 @@ class Dashboard extends Component {
       addNewItem: false,
       checked: [],
       disableCheckboxes: false,
+      items: []
     }
     this.props.getItems()
+  }
+  componentWillReceiveProps(nextProps) {
+    if(this.props.items !== nextProps.items) {
+      const items = nextProps.items
+      console.log(items)
+      this.setState({ items })
+    }
   }
 
   handlePress = (e) => {
@@ -75,10 +83,10 @@ class Dashboard extends Component {
 
   handleSubmit = () => {
     const { item_name, dept, type, description, price_public, price_private, disableCheckboxes, addNewItem, item_id } = this.state
-    const deptMap = { 'Electronics': 23, 'Home Goods': 26, 'Video Games': 21, 'Movies': 25 }
+    const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
     const utcDate = new Date()
     const date = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate())
-    const dept_id = deptMap[dept]
+    const dept_id = deptMap[dept.toLowerCase()]
     const item = {
       item_id,
       item_name,
@@ -107,12 +115,13 @@ class Dashboard extends Component {
     
     if(addNewItem) {
       this.props.addItem(item)
+      this.props.getItems()
+      
       return
     } 
     
-    this.props.editItem(item)
-    
-    
+    this.props.editItem(item)    
+    this.props.getItems()
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -129,6 +138,7 @@ render() {
         <Table>
           <TableHead>
             <TableRow style={{ height: 25 }}>
+              <TableCell style={{ textAlign: 'center', padding: 0 }}>Select Item</TableCell>
               <TableCell style={{ textAlign: 'center', padding: 0 }}>Item Name</TableCell>
               <TableCell style={{ textAlign: 'center', padding: 0 }}>Description</TableCell>
               <TableCell style={{ textAlign: 'center', padding: 0 }}>Type</TableCell>
@@ -138,7 +148,7 @@ render() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(!this.props.items.isLoading) && this.props.items.map((item, index) =>
+            {this.state.items.map((item, index) =>
               <TableRow style={{ height: 25 }} key={index}>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>
                   <Checkbox
@@ -151,7 +161,7 @@ render() {
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.type) ? item.type : '-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIns[0].department_dept_id) ? deptMap[item.SoldIns[0].department_dept_id] : '-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIns) ? deptMap[item.SoldIns[0].department_dept_id] : '-'}</TableCell>
                 <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public.toFixed(2) : '$-'}</TableCell>
                 <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_private) ? '$' + item.price_private.toFixed(2) : '$-'}</TableCell>
               </TableRow>
@@ -258,7 +268,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addItem, getItems, }, dispatch);
+  return bindActionCreators({ addItem, getItems, editItem }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

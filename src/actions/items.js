@@ -16,8 +16,17 @@ export function addItem(item) {
 }
 
 export function editItem(item) {
+  return dispatch => {
+    axios.put('/api/items', { item }).then((res) => {
+      dispatch({ type: 'EDIT_ITEM_FULFILLED', items: res.data })
+    }).catch((err) => dispatch({ type: 'RETRIEVE_ALL_ITEMS_FAILED', error: err }))
+  }
+}
+
+
+export function searchByKey(key, value) {
   return {
-    type: 'ADD_ITEM',
-    newItem: axios.put('/api/items/', { item })
+    type: 'SEARCH_ITEM',
+    searchedItems: axios.post('/api/items/' + key + '/' + value)
   }
 }
