@@ -47,7 +47,6 @@ class Dashboard extends Component {
   componentWillReceiveProps(nextProps) {
     if(this.props.items !== nextProps.items) {
       const items = nextProps.items
-      console.log(items)
       this.setState({ items })
     }
   }
