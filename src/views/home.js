@@ -5,6 +5,7 @@ import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
+import Select from 'material-ui/Select';
 
 import Header from './header'
 
@@ -22,6 +23,10 @@ class Home extends Component {
   handleKeyPress = (e) => {
     if(e.key === 'Enter')
       this.handleSearch();
+  }
+
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.value });
   }
 
   render() {
@@ -44,12 +49,20 @@ class Home extends Component {
             }}
             style={text}
           />
-          <Button color="contrast" onClick={this.handleSearch}>Search</Button>
+          <Select
+            native
+            value={this.state.catagory}
+            onChange={this.handleChange('value')}
+            inputProps={{
+              id: 'Search Selector',
+            }}
+          >
+            <option value={10}>Dept</option>
+            <option value={20}>Price</option>
+            <option value={30}>Type</option>
+          </Select>
         </div>
-        <div className='login'>
-          <h3>Employees can login</h3>
-          <Button color="contrast" onClick={() => this.context.router.history.push('/login')}>Login</Button>
-        </div>
+        
       </div>
     );
   }

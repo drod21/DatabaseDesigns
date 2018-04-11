@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Checkbox from 'material-ui/Checkbox';
+import Select from 'material-ui/Select';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import { addItem, getItems, editItem } from '../actions/items'
 import Header from './header'
