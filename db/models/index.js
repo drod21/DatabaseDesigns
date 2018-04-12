@@ -10,9 +10,8 @@ const Manages = require('./manages');
 
 WorksIn.belongsTo(Employees);
 WorksIn.belongsTo(Departments);
-Items.hasMany(SoldIn)
-SoldIn.belongsTo(Items);
-SoldIn.belongsTo(Departments);
+Items.hasOne(SoldIn)
+Departments.hasMany(SoldIn)
 
 Manages.belongsTo(Employees);
 Manages.belongsTo(Managers);

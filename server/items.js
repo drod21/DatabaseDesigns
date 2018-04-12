@@ -40,30 +40,40 @@ router.get('/item-range/:key/:attribute/:op', function (req, res, next) {
 
 
 router.get('/item-search/:key/:attribute', function (req, res, next) {
-    Items.findAll({
-        include: [SoldIn],
-        where: {
-            [req.params.key]: {
-                [Op.iLike]:  '%' + req.params.attribute + '%'
-            }
-        },
-    }).then((result) => {
-        console.log(result)
-        res.status(200).send(result);
-    }).catch(next);
+    if(req.params.key === 'department_dept_id') {
+        Items.findAll({
+            include: [{
+                model: SoldIn,
+                where: {
+                    department_dept_id: req.params.attribute
+                }
+            }]
+        }).then((result) => {
+            res.status(200).send(result);
+        }).catch(next);
+    } else {
+        Items.findAll({
+            include: [SoldIn],
+            where: {
+                [req.params.key]: {
+                    [Op.iLike]:  '%' + req.params.attribute + '%'
+                }
+            },
+        }).then((result) => {
+            res.status(200).send(result);
+        }).catch(next);
+    }
 });
 
-router.post('/items', function(req, res, next) {
+router.post('/items', async function(req, res, next) {
     const item = req.body.item
     
     const sold = Object.assign({}, {
         item_item_id: item.item_id,
         department_dept_id: item.dept_id
     })
-
-    Items.create(item).then((result) => {
-        return SoldIn.create(sold)
-    }).then((result) => {
+    await SoldIn.create(sold)
+    await Items.create(item).then((result) => {
         res.status(200).send(result);
     }).catch(next)
 })
@@ -78,9 +88,6 @@ router.put('/items', function(req, res, next) {
     Items.findOne({ where: { item_id: item.item_id }}).then((result) => {
         const updatedItem = Object.assign(result, item)
         updatedItem.save()
-        return Items.findAll({ include: [SoldIn] })
-    }).then((result) => {
-        console.log(result)
         res.status(200).send(result);
     }).catch(next);
 })

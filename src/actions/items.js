@@ -9,16 +9,17 @@ export function getItems() {
 }
 
 export function addItem(item) {
-  return {
-    type: 'ADD_ITEM',
-    newItem: axios.post('/api/items/', { item })
+  return (dispatch) => {
+    axios.post('/api/items', { item }).then((res) => {
+      dispatch({ type: 'ADD_ITEM_FULFILLED', item: item })
+    }).catch((err) => dispatch({ type: 'ADD_ITEM_FAILED', error: err }))
   }
 }
 
-export function editItem(item) {
+export function editItem(item, index) {
   return (dispatch) => {
     axios.put('/api/items', { item }).then((res) => {
-      dispatch({ type: 'EDIT_ITEM_FULFILLED', items: res.data })
+      dispatch({ type: 'EDIT_ITEM_FULFILLED', item: item, index: index })
     }).catch((err) => dispatch({ type: 'EDIT_ITEM_FAILED', error: err }))
   }
 }
@@ -27,7 +28,12 @@ export function editItem(item) {
 export function searchByKey(key, value) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
-      axios.get('/api/item-search/' + key + '/' + value).then((res) => {
+      const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
+      let attribute = value
+      if(key === 'department_dept_id') {
+        attribute = deptMap[value.toLowerCase()]
+      }
+      axios.get('/api/item-search/' + key + '/' + attribute).then((res) => {
         dispatch({ type: 'SEARCH_ITEMS_FULFILLED', items: res.data })
         resolve(res.data)
       }).catch((err) => {

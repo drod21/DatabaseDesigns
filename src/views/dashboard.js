@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
@@ -41,16 +41,16 @@ class Dashboard extends Component {
       addNewItem: false,
       checked: [],
       disableCheckboxes: false,
-      items: []
+      items: [],
+      index: ''
     }
     this.props.getItems()
   }
-  componentWillReceiveProps(nextProps) {
-    if(this.props.items !== nextProps.items) {
-      const items = nextProps.items
-      this.setState({ items })
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if(this.props.items !== nextProps.items) {
+  //     nextProps.getItems()
+  //   }
+  // }
 
   handlePress = (e) => {
     this.setState({ addNewItem: !this.state.addNewItem })
@@ -64,7 +64,7 @@ class Dashboard extends Component {
     const checked = this.state.checked
     const index = name
     const item = this.props.items[index]
-    const dept = item.SoldIns[0].department_dept_id
+    const dept = item.SoldIn.department_dept_id
     const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
     checked[index] = event.target.checked
     
@@ -77,16 +77,19 @@ class Dashboard extends Component {
       type: item.type,
       description: item.description,
       price_public: item.price_public,
-      price_private: item.price_private
+      price_private: item.price_private,
+      index: index
      })
   }
 
   handleSubmit = () => {
-    const { item_name, dept, type, description, price_public, price_private, disableCheckboxes, addNewItem, item_id } = this.state
+    const { item_name, dept, type, description, disableCheckboxes, addNewItem, item_id } = this.state
     const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
     const utcDate = new Date()
     const date = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate())
     const dept_id = deptMap[dept.toLowerCase()]
+    const price_private = Number(this.state.price_private)
+    const price_public = Number(this.state.price_public)
     const item = {
       item_id,
       item_name,
@@ -99,7 +102,16 @@ class Dashboard extends Component {
       updated_at: date
     }
 
+    if(addNewItem) {
+      this.props.addItem(item)
+    } else {
+      this.props.editItem(item, this.state.index)
+    }
+    this.props.getItems()
+    this.resetState()
+  }
 
+  resetState = () => {
     this.setState({
       item_name: '',
       item_id: getRandomInt(927),
@@ -111,23 +123,9 @@ class Dashboard extends Component {
       addNewItem: false,
       checked: [],
       disableCheckboxes: false,
+      index: ''
     })
-    
-    if(addNewItem) {
-      this.props.addItem(item)
-      this.props.getItems()
-      
-      return
-    } 
-    
-    this.props.editItem(item)    
-    this.props.getItems()
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if(nextProps !== this.props)
-  //     this.props.getItems()
-  // }
 
 render() {
   const { icon, text, home } = styles
@@ -148,7 +146,7 @@ render() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.state.items.map((item, index) =>
+            {this.props.items.map((item, index) =>
               <TableRow style={{ height: 25 }} key={index}>
                 <TableCell style={{ textAlign: 'center', padding: 0 }}>
                   <Checkbox
@@ -158,12 +156,12 @@ render() {
                     disabled={this.state.disableCheckboxes}
                   />
                 </TableCell>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.type) ? item.type : '-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIns) ? deptMap[item.SoldIns[0].department_dept_id] : '-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public.toFixed(2) : '$-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_private) ? '$' + item.price_private.toFixed(2) : '$-'}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: 0 }}>{item.item_name}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: 0 }}>{item.description}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: 0 }}>{item.type}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{deptMap[item.SoldIn.department_dept_id]}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{Number(item.price_public).toFixed(2)}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{Number(item.price_private).toFixed(2)}</TableCell>
               </TableRow>
             )}
           </TableBody>
