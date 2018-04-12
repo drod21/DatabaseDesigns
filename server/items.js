@@ -91,6 +91,15 @@ router.put('/items', function(req, res, next) {
         res.status(200).send(result);
     }).catch(next);
 })
+router.delete('/items/:item_id', async function (req, res, next) {
+    Items.destroy({ 
+        where: { item_id: req.params.item_id } 
+    }).then((result) => {
+        return Items.findAll()
+    }).then((result) => {
+        res.status(200).send(result);
+    }).catch(next);
+})
 /*
 item = { 
     id,
