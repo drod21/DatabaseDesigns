@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
-import { getItems } from '../actions/items';
 import Header from './header';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
-class Items extends Component {
+class SearchResults extends Component {
   constructor(props) {
     super(props);
     this.state = {
       searchInput: ''
     }
-    this.props.getItems()
   }
 
   handleChange = (e) => {
@@ -76,7 +73,7 @@ const styles = {
   }
 }
 
-Items.contextTypes = {
+SearchResults.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
@@ -87,8 +84,4 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ getItems }, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Items)
+export default connect(mapStateToProps)(SearchResults)

@@ -3,6 +3,7 @@ import About from './views/About';
 import Login from './views/login';
 import Home from './views/home';
 import Items from './views/items';
+import SearchResults from './views/search-results';
 import Dashboard from './views/dashboard';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -15,6 +16,7 @@ const Routes = () => {
         <Route exact path="/about" component={About} />
         <Route exact path="/login" component={Login} />
         <Route exact path='/items' component={Items} />
+        <Route exact path='/results' component={SearchResults} />
         <Route exact path='/dashboard' component={Dashboard} />
       </div>
     </Router>
