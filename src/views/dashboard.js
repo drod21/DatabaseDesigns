@@ -101,13 +101,11 @@ class Dashboard extends PureComponent {
       updated_at: date
     }
 
-    if(addNewItem) {
+    if(addNewItem)
       this.props.addItem(item)
-    } else {
+    else
       this.props.editItem(item, this.state.index)
-    }
 
-    this.props.getItems()
     this.resetState()
   }
 
@@ -159,7 +157,7 @@ render() {
                   <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
                   <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
                   <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.type) ? item.type : '-'}</TableCell>
-                  <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIn.department_dept_id) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
+                  <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIn) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
                   <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public : '$-'}</TableCell>
                   <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_private) ? '$' + item.price_private : '$-'}</TableCell>
                 </TableRow>

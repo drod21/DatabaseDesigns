@@ -11,24 +11,16 @@ export default function items(state=[], action) {
     case 'RETRIEVE_ALL_ITEMS_FAILED': 
       state = { error: action.error }
       break;
-    case 'ADD_ITEM': {
-      const tempArray = state
-
-      tempArray.push(action.item)
-      state = tempArray
+    case 'ADD_ITEM_FULFILLED': {
+      state = [ ...action.items ]
       break; 
     }
     case 'EDIT_ITEM_FULFILLED': {
-      const tempArray = state      
-      tempArray[action.index] = action.item
-      state = tempArray
+      state = [...action.items]
       break;
     }
     case 'REMOVE_ITEM_FULFILLED' : {
-      console.log(action)
-      const tempArray = action.items
-      state = tempArray
-      console.log(state)
+      state = [...action.items]
       break;
     }
     default: break;

@@ -11,7 +11,7 @@ export function getItems() {
 export function addItem(item) {
   return (dispatch) => {
     axios.post('/api/items', { item }).then((res) => {
-      dispatch({ type: 'ADD_ITEM_FULFILLED', item: item })
+      dispatch({ type: 'ADD_ITEM_FULFILLED', items: res.data })
     }).catch((err) => dispatch({ type: 'ADD_ITEM_FAILED', error: err }))
   }
 }
@@ -19,7 +19,7 @@ export function addItem(item) {
 export function editItem(item, index) {
   return (dispatch) => {
     axios.put('/api/items', { item }).then((res) => {
-      dispatch({ type: 'EDIT_ITEM_FULFILLED', item: item, index: index })
+      dispatch({ type: 'EDIT_ITEM_FULFILLED', items: res.data })
     }).catch((err) => dispatch({ type: 'EDIT_ITEM_FAILED', error: err }))
   }
 }
