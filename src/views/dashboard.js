@@ -7,7 +7,7 @@ import Button from 'material-ui/Button';
 import Checkbox from 'material-ui/Checkbox';
 import Select from 'material-ui/Select';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import { addItem, getItems, editItem } from '../actions/items'
+import { addItem, getItems, editItem, removeItem } from '../actions/items'
 import Header from './header'
 /*
 item = { 
@@ -27,7 +27,7 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max))
 }
 
-class Dashboard extends Component {
+class Dashboard extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -41,16 +41,15 @@ class Dashboard extends Component {
       addNewItem: false,
       checked: [],
       disableCheckboxes: false,
-      items: [],
       index: ''
     }
     this.props.getItems()
   }
-  // componentWillReceiveProps(nextProps) {
-  //   if(this.props.items !== nextProps.items) {
-  //     nextProps.getItems()
-  //   }
-  // }
+
+  handleDelete = () => {
+    this.props.removeItem(this.state.item_id)
+    this.resetState()
+  }
 
   handlePress = (e) => {
     this.setState({ addNewItem: !this.state.addNewItem })
@@ -107,6 +106,7 @@ class Dashboard extends Component {
     } else {
       this.props.editItem(item, this.state.index)
     }
+
     this.props.getItems()
     this.resetState()
   }
@@ -156,20 +156,24 @@ render() {
                     disabled={this.state.disableCheckboxes}
                   />
                 </TableCell>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>{item.item_name}</TableCell>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>{item.description}</TableCell>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>{item.type}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{deptMap[item.SoldIn.department_dept_id]}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{Number(item.price_public).toFixed(2)}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{Number(item.price_private).toFixed(2)}</TableCell>
-              </TableRow>
+                  <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
+                  <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
+                  <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.type) ? item.type : '-'}</TableCell>
+                  <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIn.department_dept_id) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
+                  <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public : '$-'}</TableCell>
+                  <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_private) ? '$' + item.price_private : '$-'}</TableCell>
+                </TableRow>
             )}
           </TableBody>
         </Table>
-        <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handlePress}>
-          {(this.state.disableCheckboxes) ? 'Update Item ': 'Add New Item' }
-        </Button>
-
+        <div style={{display: 'flex', flexFlow: 'row'}}>
+          <Button className='remove-item-button' id='removeItem' disabled={(this.state.disableCheckboxes) ? false : true} onClick={this.handleDelete}>
+              Remove Item
+          </Button>
+          <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handlePress}>
+            {(this.state.disableCheckboxes) ? 'Update Item ': 'Add New Item' }
+          </Button>
+        </div>
         {(this.state.addNewItem || this.state.disableCheckboxes) &&
           (<div>
           <TextField className='add-field'
@@ -266,7 +270,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addItem, getItems, editItem }, dispatch);
+  return bindActionCreators({ addItem, getItems, editItem, removeItem }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

@@ -72,11 +72,16 @@ router.post('/items', async function(req, res, next) {
         item_item_id: item.item_id,
         department_dept_id: item.dept_id
     })
-    await SoldIn.create(sold)
+    // await SoldIn.create(sold)
     await Items.create(item).then((result) => {
+        return SoldIn.create(sold)
+    }).then((result) => {
+        return Items.findAll({ include: [SoldIn] })
+    }).then((result) => {
         res.status(200).send(result);
     }).catch(next)
 })
+
 // FINISHED
 router.put('/items', function(req, res, next) {
     const item = req.body.item
@@ -92,7 +97,10 @@ router.put('/items', function(req, res, next) {
     }).catch(next);
 })
 router.delete('/items/:item_id', async function (req, res, next) {
-    Items.destroy({ 
+    await SoldIn.destroy({
+        where: { item_item_id: req.params.item_id }
+    }).catch(next);
+    await Items.destroy({ 
         where: { item_id: req.params.item_id } 
     }).then((result) => {
         return Items.findAll()

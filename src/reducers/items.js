@@ -19,11 +19,16 @@ export default function items(state=[], action) {
       break; 
     }
     case 'EDIT_ITEM_FULFILLED': {
-      const tempArray = state
-      console.log(tempArray)
+      const tempArray = state      
       tempArray[action.index] = action.item
-      console.log('after', tempArray)
       state = tempArray
+      break;
+    }
+    case 'REMOVE_ITEM_FULFILLED' : {
+      console.log(action)
+      const tempArray = action.items
+      state = tempArray
+      console.log(state)
       break;
     }
     default: break;

@@ -24,7 +24,6 @@ export function editItem(item, index) {
   }
 }
 
-
 export function searchByKey(key, value) {
   return (dispatch) => {
     return new Promise((resolve, reject) => {
@@ -56,4 +55,12 @@ export function searchByRange(key, value, op) {
       })
     })
   }
+}
+
+export function removeItem(itemId) {
+  return (dispatch) => {
+    axios.delete('/api/items/' + itemId).then((res) => {
+      dispatch({ type: 'REMOVE_ITEM_FULFILLED', items: res.data })
+    }).catch((err) => dispatch({ type: 'REMOVE_ITEM_FAILED', error: err }))
+  } 
 }
