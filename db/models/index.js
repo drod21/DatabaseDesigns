@@ -8,11 +8,12 @@ const WorksIn = require('./works-in');
 const SoldIn = require('./sold-in');
 const Manages = require('./manages');
 
-WorksIn.belongsTo(Employees);
-WorksIn.belongsTo(Departments);
 Items.hasOne(SoldIn)
 Departments.hasMany(SoldIn)
 
-Manages.belongsTo(Employees);
-Manages.belongsTo(Managers);
+Employees.hasOne(Manages);
+Managers.hasMany(Manages);
+
+Employees.hasMany(WorksIn)
+Departments.hasMany(WorksIn)
 module.exports = { Managers, Items, Employees, Departments };

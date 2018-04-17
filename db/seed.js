@@ -29,7 +29,8 @@ const seedEmployees = () => db.Promise.map([
   { eid: 1, emp_name: 'Josh Circuit', email: 'josh@gmail.com', emp_pw: hash },
   { eid: 4, emp_name: 'Robert Albrechtsson', email:'robert@gmail.com', emp_pw: hash },
   { eid: 3, emp_name: 'Cola MacCrumb', email: 'cola@gmail.com', emp_pw: hash },
-  { eid: 2, emp_name: 'Steven Spielberg', email: 'steven@gmail.com', emp_pw: hash }
+  { eid: 2, emp_name: 'Steven Spielberg', email: 'steven@gmail.com', emp_pw: hash },
+  { eid: 0, emp_name: 'Head Honcho', email: 'honcho@gmail.com', emp_pw: hash }
 
 ], (employee) => db.model('Employees').create(employee));
 
