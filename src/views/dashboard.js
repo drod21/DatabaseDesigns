@@ -1,31 +1,39 @@
-import React, { Component, PureComponent } from 'react';
+// React Imports
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
+import React, { Component, PureComponent } from 'react';
+
+// Material UI Imports
 import Button from 'material-ui/Button';
 import Checkbox from 'material-ui/Checkbox';
 import Select from 'material-ui/Select';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Tabs, { Tab } from 'material-ui/Tabs';
+import TextField from 'material-ui/TextField';
+import Typography from 'material-ui/Typography';
+
+// Local
 import { addItem, getItems, editItem, removeItem } from '../actions/items'
+import { getAllEmployees } from '../actions/employees'
+import decoder from 'jwt-decode'
 import Header from './header'
-/*
-item = { 
-    id,
-    item_name,
-    dept_id,
-    type,
-    description,
-    price_public,
-    price_private,
-    created_at,
-    updated_at
-}
-*/
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max))
 }
+
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ margin: 10 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 class Dashboard extends PureComponent {
   constructor(props) {
@@ -41,9 +49,25 @@ class Dashboard extends PureComponent {
       addNewItem: false,
       checked: [],
       disableCheckboxes: false,
-      index: ''
+      index: '',
+      empRole: '',
+      currentTab: 'change_items'
     }
     this.props.getItems()
+    this.props.getAllEmployees()
+  }
+
+  componentDidMount() {
+    const jwt = window.localStorage.getItem('jwt')
+    if(jwt) {
+      this.setState({ empRole: decoder(jwt).role })
+    } else {
+      this.context.router.history.push('/login');
+    }
+  }
+
+  handleChangeTab = (event, value) => {
+    this.setState({ currentTab: value })
   }
 
   handleDelete = () => {
@@ -125,28 +149,27 @@ class Dashboard extends PureComponent {
     })
   }
 
-render() {
-  const { icon, text, home } = styles
-  const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
+  renderEmployeesTable = () => {
+    const { icon, text, home } = styles
+    const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
+    const managerMap = { 0: 'Head Hancho', 1: 'Josh Circuit', 2: 'Steven Spielberg', 3: 'Cola MacCrumb', 4: 'Robert Albrechtsson' }
+    
     return (
-      <div className='home-container' style={home}>
-        <Header />
+      <TabContainer>
         <Table>
           <TableHead>
             <TableRow style={{ height: 25 }}>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Select Item</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Item Name</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Description</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Type</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Department</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Public Price</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Sale Price</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Select Employee</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Employee Name</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Employee Email</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Department</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Manager</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.items.map((item, index) =>
+            {this.props.employees.map((employee, index) =>
               <TableRow style={{ height: 25 }} key={index}>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>
                   <Checkbox
                     checked={this.state.checked[index]}
                     onChange={this.handleCheck(index)}
@@ -154,27 +177,25 @@ render() {
                     disabled={this.state.disableCheckboxes}
                   />
                 </TableCell>
-                  <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
-                  <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
-                  <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.type) ? item.type : '-'}</TableCell>
-                  <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIn) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
-                  <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public : '$-'}</TableCell>
-                  <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_private) ? '$' + item.price_private : '$-'}</TableCell>
-                </TableRow>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.emp_name) ? employee.emp_name : '-'}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.email) ? employee.email : '-'}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.WorksIns) ? deptMap[employee.WorksIns[0].department_dept_id] : '-'}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.Manage) ? managerMap[employee.Manage.manager_mid] : '-'}</TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>
-        <div style={{display: 'flex', flexFlow: 'row'}}>
-          <Button className='remove-item-button' id='removeItem' disabled={(this.state.disableCheckboxes) ? false : true} onClick={this.handleDelete}>
-              Remove Item
-          </Button>
-          <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handlePress}>
-            {(this.state.disableCheckboxes) ? 'Update Item ': 'Add New Item' }
+        <div style={{ display: 'flex', flexFlow: 'row' }}>
+          <Button className='remove-item-button' id='removeEmployee' disabled={(this.state.disableCheckboxes) ? false : true} onClick={this.handleDelete}>
+            Remove Item
+            </Button>
+          <Button className='add-new-item-button' id='addNewEmployee' value={(this.state.addNewEmployee) ? false : true} onClick={this.handlePress}>
+            {(this.state.disableCheckboxes) ? 'Update Item ' : 'Add New Item'}
           </Button>
         </div>
         {(this.state.addNewItem || this.state.disableCheckboxes) &&
           (<div>
-          <TextField className='add-field'
+            <TextField className='add-field'
               name='item_name'
               value={this.state.item_name}
               placeholder='Item Name'
@@ -183,8 +204,8 @@ render() {
                 disableUnderline: true
               }}
               style={text}
-          />
-          <TextField className='add-field'
+            />
+            <TextField className='add-field'
               name='dept'
               value={this.state.dept}
               placeholder='Department'
@@ -193,8 +214,87 @@ render() {
                 disableUnderline: true
               }}
               style={text}
-          /> 
-          <TextField className='add-field'
+            />
+            
+            <Button className='submit-new-item-button' onClick={this.handleSubmit}>
+              Submit
+            </Button>
+          </div>)
+        }
+      </TabContainer>
+    )
+  }
+
+
+  renderItemsTable = () => {
+    const { icon, text, home } = styles
+    const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
+    return (
+      <TabContainer>
+        <Table>
+          <TableHead>
+            <TableRow style={{ height: 25 }}>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Select Item</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Item Name</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Description</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Type</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Department</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Public Price</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Sale Price</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.props.items.map((item, index) =>
+              <TableRow style={{ height: 25 }} key={index}>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>
+                  <Checkbox
+                    checked={this.state.checked[index]}
+                    onChange={this.handleCheck(index)}
+                    value={false}
+                    disabled={this.state.disableCheckboxes}
+                  />
+                </TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.description) ? item.description : '-'}</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.type) ? item.type : '-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.SoldIn) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.price_public) ? '$' + item.price_public : '$-'}</TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.price_private) ? '$' + item.price_private : '$-'}</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+        <div style={{ display: 'flex', flexFlow: 'row' }}>
+          <Button className='remove-item-button' id='removeItem' disabled={(this.state.disableCheckboxes) ? false : true} onClick={this.handleDelete}>
+            Remove Item
+            </Button>
+          <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handlePress}>
+            {(this.state.disableCheckboxes) ? 'Update Item ' : 'Add New Item'}
+          </Button>
+        </div>
+        {(this.state.addNewItem || this.state.disableCheckboxes) &&
+          (<div>
+            <TextField className='add-field'
+              name='item_name'
+              value={this.state.item_name}
+              placeholder='Item Name'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+            />
+            <TextField className='add-field'
+              name='dept'
+              value={this.state.dept}
+              placeholder='Department'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+            />
+            <TextField className='add-field'
               name='type'
               value={this.state.type}
               placeholder='Type'
@@ -203,8 +303,8 @@ render() {
                 disableUnderline: true
               }}
               style={text}
-          />
-          <TextField className='add-field'
+            />
+            <TextField className='add-field'
               name='description'
               value={this.state.description}
               placeholder='Description'
@@ -213,32 +313,49 @@ render() {
                 disableUnderline: true
               }}
               style={text}
-          />
-          <TextField className='add-field'
-            name='price_public'
-            value={this.state.price_public}
-            placeholder='Price'
-            onChange={this.handleChange}
-            InputProps={{
-              disableUnderline: true
-            }}
-            style={text}
-          />
-          <TextField className='add-field'
-            name='price_private'
-            value={this.state.price_private}
-            placeholder='Sale Price'
-            onChange={this.handleChange}
-            InputProps={{
-              disableUnderline: true
-            }}
-            style={text}
-          />
+            />
+            <TextField className='add-field'
+              name='price_public'
+              value={this.state.price_public}
+              placeholder='Price'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+            />
+            <TextField className='add-field'
+              name='price_private'
+              value={this.state.price_private}
+              placeholder='Sale Price'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+            />
             <Button className='submit-new-item-button' onClick={this.handleSubmit}>
               Submit
             </Button>
           </div>)
         }
+      </TabContainer>
+    )
+  }
+
+render() {
+  const { icon, text, home } = styles
+  const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
+    return (
+      <div className='home-container' style={home}>
+        <Header />
+        <Tabs value={this.state.currentTab} onChange={this.handleChangeTab}>
+          <Tab label='Items' value='change_items' />
+          {(this.state.empRole === 'manager')  && <Tab label='Employees' value='change_employees' />}
+        </Tabs>
+        {this.state.currentTab === 'change_items' && this.renderItemsTable()}
+        {this.state.currentTab === 'change_employees' && this.renderEmployeesTable()}
+        
       </div>
     );
   }
@@ -261,14 +378,19 @@ const styles = {
   }
 }
 
+Dashboard.contextTypes = {
+  router: PropTypes.object.isRequired
+}
+
 function mapStateToProps(state) {
   return {
-    items: state.items
+    items: state.items,
+    employees: state.employees
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addItem, getItems, editItem, removeItem }, dispatch);
+  return bindActionCreators({ addItem, getItems, editItem, removeItem, getAllEmployees }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
