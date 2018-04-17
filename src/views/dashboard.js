@@ -142,7 +142,7 @@ class Dashboard extends PureComponent {
   }
 
   handleEmployeeSubmit = () => {
-    const { eid, emp_name, dept, email, emp_pw, addNewEmployee } = this.state
+    const { eid, emp_name, dept, email, emp_pw, addNewEmployee, active } = this.state
     const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
     const utcDate = new Date()
     const date = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate())
@@ -153,7 +153,7 @@ class Dashboard extends PureComponent {
       created_at: date,
       updated_at: date,
       eid: eid,
-      active: 1,
+      active,
       dept: deptMap[dept.toLowerCase()]
     }
 

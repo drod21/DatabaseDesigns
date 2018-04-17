@@ -6,7 +6,7 @@ const router = require('express').Router();
 const crypto = require('crypto')
 
 router.get('/employees', function (req, res, next) {
-    Employees.findAll({ include: [WorksIn, Manages] }).then((result) => {
+    Employees.findAll({ include: [ WorksIn, Manages ] }).then((result) => {
         res.status(200).send(result);
     }).catch(next);
 });
@@ -25,6 +25,7 @@ const managerMap = {
     21: 3,
     25: 4
 }
+
 router.post('/employees', async function (req, res, next) {
     const emp = req.body.employee
 
@@ -76,7 +77,7 @@ router.put('/employees', async function (req, res, next) {
         const updatedEmp = Object.assign(result, emp)
         return updatedEmp.save()
     }).then((result) => {
-        return Employees.findAll({ include: [WorksIn, Manages] })
+        return Employees.findAll({ include: [ WorksIn, Manages ] })
     }).then((result) => {
         res.status(200).send(result);
     }).catch(next)
@@ -87,7 +88,7 @@ router.delete('/employees/:eid', async function (req, res, next) {
         const updatedEmp = Object.assign(result, { active: 0 })
         return updatedEmp.save()
     }).then((result) => {
-        return Employees.findAll({ include: [WorksIn, Manages] })
+        return Employees.findAll({ include: [ WorksIn, Manages ] })
     }).then((result) => {
         res.status(200).send(result);
     }).catch(next);
