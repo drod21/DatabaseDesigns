@@ -19,6 +19,9 @@ api
   .get('/managers/:id', managers)
   .get('/employees', employees)
   .get('/employees/:id', employees)
+  .post('/employees', employees)
+  .put('/employees', employees)
+  .delete('/employees/:id', employees)
   .put('/login', login)
 
 // No routes matched? 404.

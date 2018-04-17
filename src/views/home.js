@@ -30,7 +30,7 @@ class Home extends Component {
   }
 
   handleSearch = () => {
-    if(this.state.searchOp) {
+    if(this.state.searchKey === 'price_public') {
       this.props.searchByRange(this.state.searchKey, this.state.searchInput, this.state.searchOp).then(() => {
         this.context.router.history.push('/results')
       }).catch((err) => alert('error finding items:: ' + err))
@@ -46,40 +46,43 @@ class Home extends Component {
   }
 
   render() {
-    const { icon, text, home, searchSelects } = styles
+    const { icon, text, home, searchSelects, selectsColumn, searchBar } = styles
     return(
       <div className='home-container' style={home}>
         <Header/>
-        <div className='search-bar'>
-          <Select
-            native
-            value={this.state.searchKey}
-            style={searchSelects}
-            onChange={this.handleChange('searchKey')}
-            inputProps={{
-              id: 'Search Selector',
-            }}
-          >
-            <option value="">Search for..</option>
-            <option value={'department_dept_id'}>Dept</option>
-            <option value={'price_public'}>Price</option>
-            <option value={'type'}>Type</option>
-            <option value={'item_name'}>Name</option>
-          </Select>
-          <Select
-            native
-            value={this.state.searchOp}
-            style={searchSelects}
-            onChange={this.handleChange('searchOp')}
-            inputProps={{
-              id: 'Range Selector',
-            }}
-          >
-            <option value="">That is..(optional)</option>
-            <option value={'eq'}>Equal to</option>
-            <option value={'lte'}>Less than</option>
-            <option value={'gte'}>Greater than</option>
-          </Select>
+        <div className='search-bar' style={searchBar}>
+          <div className='selects-column' style={selectsColumn}>
+            <Select
+              native
+              value={this.state.searchKey}
+              style={searchSelects}
+              onChange={this.handleChange('searchKey')}
+              inputProps={{
+                id: 'Search Selector',
+              }}
+            >
+              <option value="">All</option>
+              <option value={'department_dept_id'}>Dept</option>
+              <option value={'price_public'}>Price</option>
+              <option value={'type'}>Type</option>
+              <option value={'item_name'}>Name</option>
+            </Select>
+            <Select
+              disabled={(this.state.searchKey === 'price_public') ? false : true}
+              native
+              value={this.state.searchOp}
+              style={searchSelects}
+              onChange={this.handleChange('searchOp')}
+              inputProps={{
+                id: 'Range Selector',
+              }}
+            >
+              <option value="">Range</option>
+              <option value={'eq'}>Equal to</option>
+              <option value={'lte'}>Less than</option>
+              <option value={'gte'}>Greater than</option>
+            </Select>
+          </div>
           <TextField className='user-search-field'
             name='searchInput'
             value={this.state.searchInput}
@@ -103,6 +106,10 @@ class Home extends Component {
 
 const styles = {
   icon: { color: 'black' },
+  selectsColumn: {
+    display: 'flex',
+    flexFlow: 'column'
+  },
   home: {
     alignItems: 'center',
     display: 'flex',
@@ -117,7 +124,13 @@ const styles = {
     width: '300px'
   },
   searchSelects: {
-    margin: '0 10px'
+    margin: '10px',
+    width: '150px'
+  },
+  searchBar: {
+    alignItems: 'center',
+    display: 'flex',
+    flexFlow: 'row wrap'
   }
 }
 

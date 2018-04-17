@@ -12,6 +12,7 @@ const Employees = db.define('Employees', {
     email: Sequelize.TEXT,
     emp_name: Sequelize.TEXT,
     emp_pw: Sequelize.TEXT,
+    active: Sequelize.INTEGER
 });
 
 module.exports = Employees;

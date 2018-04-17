@@ -15,14 +15,23 @@ class Header extends PureComponent {
         this.setState({ isLoggedIn: (token) ? true : false })
     }
 
+    logout = () => {
+        window.localStorage.removeItem('jwt')
+        this.context.router.history.push('/login')
+        this.setState({ isLoggedIn: false })
+    }
+
     render() {
         const { header, headerLinks } = styles
         return (
             <div className='header' style={header}>
                 <Link to='/' style={headerLinks}>Home</Link>
                 <Link to='/items' style={headerLinks}>Items</Link>
-                <Link to='/login' style={headerLinks}>Login</Link>
-                {(this.state.isLoggedIn) && <Link to='/dashboard' style={headerLinks}>Dashboard</Link>}
+                {(this.state.isLoggedIn) ? 
+                    <div style={headerLinks} onClick={this.logout}>Logout</div> 
+                    : <Link to='/login' style={headerLinks}>Login</Link>
+                }
+                 {(this.state.isLoggedIn) && <Link to='/dashboard' style={headerLinks}>Dashboard</Link>}
             </div>
         )
     }       
@@ -39,6 +48,7 @@ const styles = {
     },
     headerLinks: {
         border: '1px solid white',
+        cursor: 'pointer',
         color: 'white',
         margin: '25px',
         padding: '5px 10px',

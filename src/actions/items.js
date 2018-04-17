@@ -16,7 +16,7 @@ export function addItem(item) {
   }
 }
 
-export function editItem(item, index) {
+export function editItem(item) {
   return (dispatch) => {
     axios.put('/api/items', { item }).then((res) => {
       dispatch({ type: 'EDIT_ITEM_FULFILLED', items: res.data })
@@ -44,6 +44,8 @@ export function searchByKey(key, value) {
 }
 
 export function searchByRange(key, value, op) {
+  if(!op)
+    op = 'eq'
   return (dispatch) => {
     return new Promise((resolve, reject) => {
       axios.get('/api/item-range/' + key + '/' + value + '/' + op).then((res) => {

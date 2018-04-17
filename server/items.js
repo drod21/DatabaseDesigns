@@ -72,7 +72,7 @@ router.post('/items', async function(req, res, next) {
         item_item_id: item.item_id,
         department_dept_id: item.dept_id
     })
-    
+    delete item.dept_id // this is a test
     await Items.create(item).then((result) => {
         return SoldIn.create(sold)
     }).then((result) => {
@@ -82,14 +82,13 @@ router.post('/items', async function(req, res, next) {
     }).catch(next)
 })
 
-// FINISHED
 router.put('/items', async function(req, res, next) {
     const item = req.body.item
     const sold = Object.assign({}, {
         item_item_id: item.item_id,
         department_dept_id: item.dept_id
     })
-
+    delete item.dept_id // this is a test
     await Items.findOne({ where: { item_id: item.item_id }}).then((result) => {
         const updatedItem = Object.assign(result, item)
        return updatedItem.save()
@@ -99,6 +98,7 @@ router.put('/items', async function(req, res, next) {
         res.status(200).send(result);
     }).catch(next)
 })
+
 router.delete('/items/:item_id', async function (req, res, next) {
     await SoldIn.destroy({
         where: { item_item_id: req.params.item_id }
@@ -106,28 +106,10 @@ router.delete('/items/:item_id', async function (req, res, next) {
     await Items.destroy({ 
         where: { item_id: req.params.item_id } 
     }).then((result) => {
-        return Items.findAll()
+        return Items.findAll({ include: [SoldIn] })
     }).then((result) => {
         res.status(200).send(result);
     }).catch(next);
 })
-/*
-item = { 
-    id,
-    item_name,
-    dept_id,
-    type,
-    description,
-    price_public,
-    price_private,
-    created_at,
-    updated_at
-}
-*/
-// router.put('/items', function (req, res, next) {
-//     Items.upsert(req.body.item).then((result) => {
-//         res.status(200).send(result);
-//     }).catch(next)
-// })
 
 module.exports = router;

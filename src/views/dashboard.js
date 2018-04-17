@@ -15,7 +15,7 @@ import Typography from 'material-ui/Typography';
 
 // Local
 import { addItem, getItems, editItem, removeItem } from '../actions/items'
-import { getAllEmployees } from '../actions/employees'
+import { getAllEmployees, addEmployee, editEmployee, removeEmployee } from '../actions/employees'
 import decoder from 'jwt-decode'
 import Header from './header'
 
@@ -47,11 +47,19 @@ class Dashboard extends PureComponent {
       price_public: '',
       price_private: '',
       addNewItem: false,
+      addNewEmployee: false,
       checked: [],
+      empChecked: [],
       disableCheckboxes: false,
+      disableEmpCheckboxes: false,
       index: '',
       empRole: '',
-      currentTab: 'change_items'
+      currentTab: 'change_items',
+      eid: '',
+      active: '',
+      email: '',
+      emp_name: '',
+      emp_pw: ''
     }
     this.props.getItems()
     this.props.getAllEmployees()
@@ -75,12 +83,40 @@ class Dashboard extends PureComponent {
     this.resetState()
   }
 
-  handlePress = (e) => {
-    this.setState({ addNewItem: !this.state.addNewItem })
+  handleEmpDelete = () => {
+    this.props.removeEmployee(this.state.eid)
+    this.resetState()
   }
 
   handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
+  }
+
+  handleEmpAdd = () => {
+    this.setState({ addNewEmployee: !this.state.addNewEmployee })
+  }
+
+  handleAddItem = () => {
+    this.setState({ addNewItem: !this.state.addNewItem })
+  }
+
+  handleEmpCheck = (name) => (event) => {
+    const checked = this.state.empChecked
+    const index = name
+    const emp = this.props.employees[index]
+    const dept = emp.WorksIns[0].department_dept_id
+    const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
+    checked[index] = event.target.checked
+    this.setState({
+      empChecked: checked,
+      disableEmpCheckboxes: true,
+      emp_name: emp.emp_name,
+      eid: emp.eid,
+      dept: deptMap[dept],
+      email: emp.email,
+      active: emp.active,
+      index: index
+    })
   }
 
   handleCheck = (name) => (event) => {
@@ -103,6 +139,30 @@ class Dashboard extends PureComponent {
       price_private: item.price_private,
       index: index
      })
+  }
+
+  handleEmployeeSubmit = () => {
+    const { eid, emp_name, dept, email, emp_pw, addNewEmployee } = this.state
+    const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
+    const utcDate = new Date()
+    const date = new Date(utcDate.getUTCFullYear(), utcDate.getUTCMonth(), utcDate.getUTCDate())
+    const employee = {
+      emp_name,
+      email,
+      emp_pw,
+      created_at: date,
+      updated_at: date,
+      eid: eid,
+      active: 1,
+      dept: deptMap[dept.toLowerCase()]
+    }
+
+    if(addNewEmployee)
+      this.props.addEmployee(employee)
+    else
+      this.props.editEmployee(employee)
+
+    this.resetState()
   }
 
   handleSubmit = () => {
@@ -128,7 +188,7 @@ class Dashboard extends PureComponent {
     if(addNewItem)
       this.props.addItem(item)
     else
-      this.props.editItem(item, this.state.index)
+      this.props.editItem(item)
 
     this.resetState()
   }
@@ -143,9 +203,16 @@ class Dashboard extends PureComponent {
       price_public: '',
       price_private: '',
       addNewItem: false,
+      addNewEmployee: false,
       checked: [],
+      empChecked: [],
       disableCheckboxes: false,
-      index: ''
+      disableEmpCheckboxes: false,
+      index: '',
+      eid: '',
+      email: '',
+      emp_name: '',
+      emp_pw: ''
     })
   }
 
@@ -160,10 +227,12 @@ class Dashboard extends PureComponent {
           <TableHead>
             <TableRow style={{ height: 25 }}>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Select Employee</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Employee ID</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Employee Name</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Employee Email</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Department</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Manager</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Active</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -171,34 +240,67 @@ class Dashboard extends PureComponent {
               <TableRow style={{ height: 25 }} key={index}>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>
                   <Checkbox
-                    checked={this.state.checked[index]}
-                    onChange={this.handleCheck(index)}
+                    checked={this.state.empChecked[index]}
+                    onChange={this.handleEmpCheck(index)}
                     value={false}
-                    disabled={this.state.disableCheckboxes}
+                    name={'empCheck'}
+                    disabled={this.state.disableEmpCheckboxes}
                   />
                 </TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.eid >= 0) ? employee.eid : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.emp_name) ? employee.emp_name : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.email) ? employee.email : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.WorksIns) ? deptMap[employee.WorksIns[0].department_dept_id] : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.Manage) ? managerMap[employee.Manage.manager_mid] : '-'}</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.active) ? employee.active : '-'}</TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
         <div style={{ display: 'flex', flexFlow: 'row' }}>
-          <Button className='remove-item-button' id='removeEmployee' disabled={(this.state.disableCheckboxes) ? false : true} onClick={this.handleDelete}>
-            Remove Item
+          <Button className='remove-item-button' id='removeEmployee' disabled={(this.state.disableEmpCheckboxes) ? false : true} onClick={this.handleEmpDelete}>
+            Deactivate Employee
             </Button>
-          <Button className='add-new-item-button' id='addNewEmployee' value={(this.state.addNewEmployee) ? false : true} onClick={this.handlePress}>
-            {(this.state.disableCheckboxes) ? 'Update Item ' : 'Add New Item'}
+          <Button className='add-new-item-button' id='addNewEmployee' name='addNewEmployee' value={(this.state.addNewEmployee) ? false : true} onClick={this.handleEmpAdd}>
+            {(this.state.disableCheckboxes) ? 'Update Employee ' : 'Add New Employee'}
           </Button>
         </div>
-        {(this.state.addNewItem || this.state.disableCheckboxes) &&
+        {(this.state.addNewEmployee || this.state.disableEmpCheckboxes) &&
           (<div>
             <TextField className='add-field'
-              name='item_name'
-              value={this.state.item_name}
-              placeholder='Item Name'
+              name='eid'
+              value={this.state.eid}
+              placeholder='Employee ID'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+            />
+            <TextField className='add-field'
+              name='emp_name'
+              value={this.state.emp_name}
+              placeholder='Employee Name'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+            />
+            <TextField className='add-field'
+              name='email'
+              value={this.state.email}
+              placeholder='Employee Email'
+              onChange={this.handleChange}
+              InputProps={{
+                disableUnderline: true
+              }}
+              style={text}
+            />
+            <TextField className='add-field'
+              name='emp_pw'
+              value={this.state.emp_pw}
+              placeholder='Employee Password'
               onChange={this.handleChange}
               InputProps={{
                 disableUnderline: true
@@ -216,7 +318,7 @@ class Dashboard extends PureComponent {
               style={text}
             />
             
-            <Button className='submit-new-item-button' onClick={this.handleSubmit}>
+            <Button className='submit-new-item-button' onClick={this.handleEmployeeSubmit}>
               Submit
             </Button>
           </div>)
@@ -268,7 +370,7 @@ class Dashboard extends PureComponent {
           <Button className='remove-item-button' id='removeItem' disabled={(this.state.disableCheckboxes) ? false : true} onClick={this.handleDelete}>
             Remove Item
             </Button>
-          <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handlePress}>
+          <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handleAddItem}>
             {(this.state.disableCheckboxes) ? 'Update Item ' : 'Add New Item'}
           </Button>
         </div>
@@ -351,7 +453,7 @@ render() {
         <Header />
         <Tabs value={this.state.currentTab} onChange={this.handleChangeTab}>
           <Tab label='Items' value='change_items' />
-          {(this.state.empRole === 'manager')  && <Tab label='Employees' value='change_employees' />}
+          {(this.state.empRole === 'manager' || this.state.empRole === 'CEO')  && <Tab label='Employees' value='change_employees' />}
         </Tabs>
         {this.state.currentTab === 'change_items' && this.renderItemsTable()}
         {this.state.currentTab === 'change_employees' && this.renderEmployeesTable()}
@@ -390,7 +492,16 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addItem, getItems, editItem, removeItem, getAllEmployees }, dispatch);
+  return bindActionCreators({ 
+    addEmployee,
+    addItem,
+    editEmployee,
+    editItem,
+    getAllEmployees,
+    getItems,
+    removeEmployee,
+    removeItem
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

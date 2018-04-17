@@ -6,13 +6,11 @@ const jwt = require('jsonwebtoken');
 const KEY = 'ThisIsTheSecretKey' // TODO: Put this somewhere else
 
 router.put('/login', function (req, res, next) {
-  console.log('req', req.body)
   Employees.findOne({
     where: { email: req.body.email },
   }).then((result) => {
     const hash = crypto.createHash('md5').update(req.body.password).digest('hex');
-    const emp_id = result.emp_id
-    
+    const emp_id = result.dataValues.eid
     if(emp_id === 0) {
       role = 'CEO'
     } else if(emp_id >= 1 && emp_id <= 4) {
@@ -24,8 +22,7 @@ router.put('/login', function (req, res, next) {
     const token = Object.assign({}, {
       token: jwt.sign({ emp_id: emp_id, role: role }, KEY, { expiresIn: '5 days' })
     })
-    console.log(token.token)
-    if(hash == result.emp_pw)
+    if(hash == result.emp_pw && result.active === 1)
       res.status(200).send(token);
     else
       res.status(401).send('Invalid login')

@@ -22,15 +22,15 @@ const seedSoldIn = () => db.Promise.map([
 ], (sold) => db.model('SoldIn').create(sold))
 
 const seedEmployees = () => db.Promise.map([
-  { eid: 21, emp_name: 'Derek Rodriguez', email: 'derek@gmail.com', emp_pw: hash },
-  { eid: 25, emp_name: 'Anthony Teresi', email: 'anthony@gmail.com', emp_pw: hash },
-  { eid: 32, emp_name: 'Joe Schmoe', email: 'joe@gmail.com', emp_pw: hash },
-  { eid: 35, emp_name: 'Brianna Grace', email: 'brianna@gmail.com', emp_pw: hash },
-  { eid: 1, emp_name: 'Josh Circuit', email: 'josh@gmail.com', emp_pw: hash },
-  { eid: 4, emp_name: 'Robert Albrechtsson', email:'robert@gmail.com', emp_pw: hash },
-  { eid: 3, emp_name: 'Cola MacCrumb', email: 'cola@gmail.com', emp_pw: hash },
-  { eid: 2, emp_name: 'Steven Spielberg', email: 'steven@gmail.com', emp_pw: hash },
-  { eid: 0, emp_name: 'Head Honcho', email: 'honcho@gmail.com', emp_pw: hash }
+  { eid: 21, emp_name: 'Derek Rodriguez', email: 'derek@gmail.com', emp_pw: hash, active: 1 },
+  { eid: 25, emp_name: 'Anthony Teresi', email: 'anthony@gmail.com', emp_pw: hash, active: 1 },
+  { eid: 32, emp_name: 'Joe Schmoe', email: 'joe@gmail.com', emp_pw: hash, active: 1 },
+  { eid: 35, emp_name: 'Brianna Grace', email: 'brianna@gmail.com', emp_pw: hash, active: 1 },
+  { eid: 1, emp_name: 'Josh Circuit', email: 'josh@gmail.com', emp_pw: hash, active: 1 },
+  { eid: 4, emp_name: 'Robert Albrechtsson', email:'robert@gmail.com', emp_pw: hash, active: 1 },
+  { eid: 3, emp_name: 'Cola MacCrumb', email: 'cola@gmail.com', emp_pw: hash, active: 1 },
+  { eid: 2, emp_name: 'Steven Spielberg', email: 'steven@gmail.com', emp_pw: hash, active: 1 },
+  { eid: 0, emp_name: 'Head Honcho', email: 'honcho@gmail.com', emp_pw: hash, active: 1 }
 
 ], (employee) => db.model('Employees').create(employee));
 
