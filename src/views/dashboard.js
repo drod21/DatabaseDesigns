@@ -217,7 +217,7 @@ class Dashboard extends PureComponent {
   }
 
   renderEmployeesTable = () => {
-    const { icon, text, home } = styles
+    const { icon, text, home, button } = styles
     const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
     const managerMap = { 0: 'Head Hancho', 1: 'Josh Circuit', 2: 'Steven Spielberg', 3: 'Cola MacCrumb', 4: 'Robert Albrechtsson' }
     
@@ -258,10 +258,10 @@ class Dashboard extends PureComponent {
           </TableBody>
         </Table>
         <div style={{ display: 'flex', flexFlow: 'row' }}>
-          <Button className='remove-item-button' id='removeEmployee' disabled={(this.state.disableEmpCheckboxes) ? false : true} onClick={this.handleEmpDelete}>
+          <Button className='remove-item-button' id='removeEmployee' style={button} disabled={(this.state.disableEmpCheckboxes) ? false : true} onClick={this.handleEmpDelete}>
             Deactivate Employee
             </Button>
-          <Button className='add-new-item-button' id='addNewEmployee' name='addNewEmployee' value={(this.state.addNewEmployee) ? false : true} onClick={this.handleEmpAdd}>
+          <Button className='add-new-item-button' style={button} id='addNewEmployee' name='addNewEmployee' value={(this.state.addNewEmployee) ? false : true} onClick={this.handleEmpAdd}>
             {(this.state.disableCheckboxes) ? 'Update Employee ' : 'Add New Employee'}
           </Button>
         </div>
@@ -318,7 +318,7 @@ class Dashboard extends PureComponent {
               style={text}
             />
             
-            <Button className='submit-new-item-button' onClick={this.handleEmployeeSubmit}>
+            <Button className='submit-new-item-button' style={button} onClick={this.handleEmployeeSubmit}>
               Submit
             </Button>
           </div>)
@@ -329,7 +329,7 @@ class Dashboard extends PureComponent {
 
 
   renderItemsTable = () => {
-    const { icon, text, home } = styles
+    const { icon, text, home, button } = styles
     const deptMap = { 23: 'Electronics', 26: 'Home Goods', 21: 'Video Games', 25: 'Movies' }
     return (
       <TabContainer>
@@ -367,10 +367,10 @@ class Dashboard extends PureComponent {
           </TableBody>
         </Table>
         <div style={{ display: 'flex', flexFlow: 'row' }}>
-          <Button className='remove-item-button' id='removeItem' disabled={(this.state.disableCheckboxes) ? false : true} onClick={this.handleDelete}>
+          <Button className='remove-item-button' id='removeItem' style={button} disabled={(this.state.disableCheckboxes) ? false : true} onClick={this.handleDelete}>
             Remove Item
             </Button>
-          <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} onClick={this.handleAddItem}>
+          <Button className='add-new-item-button' id='addNewItem' value={(this.state.addNewItem) ? false : true} style={button} onClick={this.handleAddItem}>
             {(this.state.disableCheckboxes) ? 'Update Item ' : 'Add New Item'}
           </Button>
         </div>
@@ -436,7 +436,7 @@ class Dashboard extends PureComponent {
               }}
               style={text}
             />
-            <Button className='submit-new-item-button' onClick={this.handleSubmit}>
+            <Button className='submit-new-item-button' onClick={this.handleSubmit} style={button}>
               Submit
             </Button>
           </div>)
@@ -464,6 +464,14 @@ render() {
 }
 
 const styles = {
+  button: {
+    border: '1px solid grey',
+    cursor: 'pointer',
+    color: '#68a5c9',
+    margin: '25px',
+    padding: '5px 10px',
+    textDecoration: 'none'
+  },
   icon: { color: 'black' },
   home: {
     alignItems: 'center',
