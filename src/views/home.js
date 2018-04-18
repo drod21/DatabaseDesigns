@@ -50,6 +50,7 @@ class Home extends Component {
     return(
       <div className='home-container' style={home}>
         <Header/>
+        <h2>DART Department Store</h2>
         <div className='search-bar' style={searchBar}>
           <div className='selects-column' style={selectsColumn}>
             <Select
@@ -112,8 +113,10 @@ const styles = {
   },
   home: {
     alignItems: 'center',
+    backgroundColor: '#68a5c9',
     display: 'flex',
-    flexFlow: 'column'
+    flexFlow: 'column',
+    height: '100vh'
   },
   text: {
     background: 'white',

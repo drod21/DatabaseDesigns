@@ -451,7 +451,7 @@ render() {
     return (
       <div className='home-container' style={home}>
         <Header />
-        <Tabs value={this.state.currentTab} onChange={this.handleChangeTab}>
+        <Tabs value={this.state.currentTab} onChange={this.handleChangeTab} indicatorColor='#68a5c9'>
           <Tab label='Items' value='change_items' />
           {(this.state.empRole === 'manager' || this.state.empRole === 'CEO')  && <Tab label='Employees' value='change_employees' />}
         </Tabs>
