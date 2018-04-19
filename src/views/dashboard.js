@@ -73,14 +73,9 @@ class Dashboard extends PureComponent {
       this.context.router.history.push('/login');
     }
   }
-
-  componentWillReceiveProps(nextProps) {
-    if(this.props !== nextProps)
-      this.resetState()
-  }
-
+  
   handleChangeTab = (event, value) => {
-    this.setState({ currentTab: value })
+    this.resetState(value);
   }
 
   handleDelete = () => {
@@ -146,7 +141,7 @@ class Dashboard extends PureComponent {
      })
   }
 
-  handleEmployeeSubmit = async () => {
+  handleEmployeeSubmit = () => {
     const { eid, emp_name, dept, email, emp_pw, addNewEmployee, active } = this.state
     const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
     const utcDate = new Date()
@@ -166,11 +161,10 @@ class Dashboard extends PureComponent {
       this.props.addEmployee(employee)
     else
       this.props.editEmployee(employee)
-
-    await this.resetState()
+    window.location.reload()
   }
 
-  handleSubmit = async () => {
+  handleSubmit = () => {
     const { item_name, dept, type, description, disableCheckboxes, addNewItem, item_id } = this.state
     const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
     const utcDate = new Date()
@@ -195,10 +189,10 @@ class Dashboard extends PureComponent {
     else
       this.props.editItem(item)
 
-    await this.resetState()
+    window.location.reload()
   }
 
-  resetState = async () => {
+  resetState = async (tab) => {
     const checked = this.state.checked
     const empChecked = this.state.empChecked
 
@@ -217,7 +211,7 @@ class Dashboard extends PureComponent {
       price_public: '',
       price_private: '',
       addNewItem: false,
-      currentTab: 'change_items',
+      currentTab: tab,
       addNewEmployee: false,
       checked: checked,
       empChecked: empChecked,
