@@ -56,7 +56,7 @@ class Dashboard extends PureComponent {
       empRole: '',
       currentTab: 'change_items',
       eid: '',
-      active: '',
+      active: 1,
       email: '',
       emp_name: '',
       emp_pw: ''
