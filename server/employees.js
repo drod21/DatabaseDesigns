@@ -60,6 +60,8 @@ router.put('/employees', async function (req, res, next) {
     // this means the employee's pw was updated
     if(emp.emp_pw) {
         emp.emp_pw = crypto.createHash('md5').update(emp.emp_pw).digest('hex');
+    } else {
+        delete emp.emp_pw
     }
 
     const works = Object.assign({}, {
