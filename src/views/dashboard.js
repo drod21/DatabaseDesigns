@@ -242,10 +242,10 @@ class Dashboard extends PureComponent {
           <TableHead>
             <TableRow style={{ height: 25 }}>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Select Employee</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Department</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Employee ID</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Employee Name</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Employee Email</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Department</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Manager</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Active</TableCell>
             </TableRow>
@@ -262,10 +262,10 @@ class Dashboard extends PureComponent {
                     disabled={this.state.disableEmpCheckboxes}
                   />
                 </TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.WorksIns) ? deptMap[employee.WorksIns[0].department_dept_id] : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.eid >= 0) ? employee.eid : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.emp_name) ? employee.emp_name : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.email) ? employee.email : '-'}</TableCell>
-                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.WorksIns) ? deptMap[employee.WorksIns[0].department_dept_id] : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.Manage) ? managerMap[employee.Manage.manager_mid] : '-'}</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(employee.active) ? employee.active : '-'}</TableCell>
               </TableRow>
@@ -352,10 +352,10 @@ class Dashboard extends PureComponent {
           <TableHead>
             <TableRow style={{ height: 25 }}>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Select Item</TableCell>
+              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Department</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Item Name</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Description</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Type</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Department</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Public Price</TableCell>
               <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>Sale Price</TableCell>
             </TableRow>
@@ -371,10 +371,10 @@ class Dashboard extends PureComponent {
                     disabled={this.state.disableCheckboxes}
                   />
                 </TableCell>
+                <TableCell numeric style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.SoldIn) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.description) ? item.description : '-'}</TableCell>
                 <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.type) ? item.type : '-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.SoldIn) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
                 <TableCell numeric style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.price_public) ? '$' + item.price_public : '$-'}</TableCell>
                 <TableCell numeric style={{ textAlign: 'center', padding: '0 5px', margin: '0 10px' }}>{(item.price_private) ? '$' + item.price_private : '$-'}</TableCell>
               </TableRow>

@@ -6,10 +6,22 @@ import Button from 'material-ui/Button';
 import Icon from 'material-ui/Icon';
 import IconButton from 'material-ui/IconButton';
 import TextField from 'material-ui/TextField';
+import Typography from 'material-ui/Typography';
 import { getItems } from '../actions/items';
 import Header from './header';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
+function TabContainer(props) {
+  return (
+    <Typography component="div" style={{ margin: 10 }}>
+      {props.children}
+    </Typography>
+  );
+}
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 class Items extends Component {
   constructor(props) {
     super(props);
@@ -34,26 +46,30 @@ class Items extends Component {
     return (
       <div className='home-container' style={home}>
         <Header />
-        <Table>
-          <TableHead>
-            <TableRow style={{ height: 25 }}>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Item Name</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Description</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Department</TableCell>
-              <TableCell style={{ textAlign: 'center', padding: 0 }}>Price</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(!this.props.items.isLoading) && this.props.items.map((item, index) =>
-              <TableRow style={{ height: 25 }} key={index}>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
-                <TableCell style={{ textAlign: 'center', padding: 0 }}>{(item.description) ? item.description : '-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.SoldIn.department_dept_id) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
-                <TableCell numeric style={{ textAlign: 'center', padding: 0 }}>{(item.price_public) ? '$' + item.price_public : '$-'}</TableCell>
+        <TabContainer>
+          <Table>
+            <TableHead>
+              <TableRow style={{ height: 25 }}>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '10px' }}>Department</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '10px' }}>Item Name</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '10px' }}>Description</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '10px' }}>Type</TableCell>
+                <TableCell style={{ textAlign: 'center', padding: '0 5px', margin: '10px' }}>Price</TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {(!this.props.items.isLoading) && this.props.items.map((item, index) =>
+                <TableRow style={{ height: 25 }} key={index}>
+                  <TableCell numeric style={{ textAlign: 'center', padding: '10px 5px', margin: '10px' }}>{(item.SoldIn) ? deptMap[item.SoldIn.department_dept_id] : '-'}</TableCell>
+                  <TableCell style={{ textAlign: 'center', padding: '10px 5px', margin: '10px' }}>{(item.item_name) ? item.item_name : '-'}</TableCell>
+                  <TableCell style={{ textAlign: 'center', padding: '10px 5px', margin: '10px' }}>{(item.description) ? item.description : '-'}</TableCell>
+                  <TableCell style={{ textAlign: 'center', padding: '10px 5px', margin: '10px' }}>{(item.type) ? item.type : '-'}</TableCell>
+                  <TableCell numeric style={{ textAlign: 'center', padding: '10px 5px', margin: '10px' }}>{(item.price_public) ? '$' + item.price_public : '$-'}</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TabContainer>
       </div>
     );
   }
