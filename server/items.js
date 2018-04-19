@@ -93,6 +93,11 @@ router.put('/items', async function(req, res, next) {
         const updatedItem = Object.assign(result, item)
        return updatedItem.save()
     }).then((result) => {
+        return SoldIn.findOne({ where: { item_item_id: item.item_id } })
+    }).then((result) => {
+        const updateSoldIn = Object.assign(result, sold)
+        return updateSoldIn.save()
+    }).then((result) => {
         return Items.findAll({ include: [SoldIn] })
     }).then((result) => {
         res.status(200).send(result);

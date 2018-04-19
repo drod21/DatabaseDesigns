@@ -64,18 +64,23 @@ router.put('/employees', async function (req, res, next) {
 
     const works = Object.assign({}, {
         employee_eid: emp.eid,
-        department_dept_id: emp.dept_id
+        department_dept_id: emp.dept
     })
 
     const managedBy = Object.assign({}, {
         employee_eid: emp.eid,
-        manager_mid: managerMap[emp.dept_id]
+        manager_mid: managerMap[emp.dept]
     })
 
-    delete emp.dept_id
+    delete emp.dept
     await Employees.findOne({ where: { eid: emp.eid }}).then((result) => {
         const updatedEmp = Object.assign(result, emp)
         return updatedEmp.save()
+    }).then((result) => {
+        return WorksIn.findOne({ where: { employee_eid: emp.eid } })
+    }).then((result) => {
+        const updatedWorksIn = Object.assign(result, works)
+        return updatedWorksIn.save()
     }).then((result) => {
         return Employees.findAll({ include: [ WorksIn, Manages ] })
     }).then((result) => {

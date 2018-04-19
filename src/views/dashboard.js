@@ -74,6 +74,11 @@ class Dashboard extends PureComponent {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(this.props !== nextProps)
+      this.resetState()
+  }
+
   handleChangeTab = (event, value) => {
     this.setState({ currentTab: value })
   }
@@ -109,7 +114,7 @@ class Dashboard extends PureComponent {
     checked[index] = event.target.checked
     this.setState({
       empChecked: checked,
-      disableEmpCheckboxes: true,
+      disableEmpCheckboxes: event.target.checked,
       emp_name: emp.emp_name,
       eid: emp.eid,
       dept: deptMap[dept],
@@ -141,7 +146,7 @@ class Dashboard extends PureComponent {
      })
   }
 
-  handleEmployeeSubmit = () => {
+  handleEmployeeSubmit = async () => {
     const { eid, emp_name, dept, email, emp_pw, addNewEmployee, active } = this.state
     const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
     const utcDate = new Date()
@@ -162,10 +167,10 @@ class Dashboard extends PureComponent {
     else
       this.props.editEmployee(employee)
 
-    this.resetState()
+    await this.resetState()
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const { item_name, dept, type, description, disableCheckboxes, addNewItem, item_id } = this.state
     const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
     const utcDate = new Date()
@@ -190,11 +195,20 @@ class Dashboard extends PureComponent {
     else
       this.props.editItem(item)
 
-    this.resetState()
+    await this.resetState()
   }
 
-  resetState = () => {
-    this.setState({
+  resetState = async () => {
+    const checked = this.state.checked
+    const empChecked = this.state.empChecked
+
+    if(empChecked[this.state.index])
+      empChecked.splice(0, empChecked.length)
+
+    if(checked[this.state.index])
+      checked.splice(0, checked.length)
+
+    await this.setState({
       item_name: '',
       item_id: getRandomInt(927),
       dept: '',
@@ -203,9 +217,10 @@ class Dashboard extends PureComponent {
       price_public: '',
       price_private: '',
       addNewItem: false,
+      currentTab: 'change_items',
       addNewEmployee: false,
-      checked: [],
-      empChecked: [],
+      checked: checked,
+      empChecked: empChecked,
       disableCheckboxes: false,
       disableEmpCheckboxes: false,
       index: '',
