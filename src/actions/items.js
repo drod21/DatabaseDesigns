@@ -29,9 +29,13 @@ export function searchByKey(key, value) {
     return new Promise((resolve, reject) => {
       const deptMap = { 'electronics': 23, 'home goods': 26, 'video games': 21, 'movies': 25 }
       let attribute = value
+      if(!key)
+        key = 'item_name'
+
       if(key === 'department_dept_id') {
         attribute = deptMap[value.toLowerCase()]
       }
+      
       axios.get('/api/item-search/' + key + '/' + attribute).then((res) => {
         dispatch({ type: 'SEARCH_ITEMS_FULFILLED', items: res.data })
         resolve(res.data)
