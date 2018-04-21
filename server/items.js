@@ -105,11 +105,12 @@ router.put('/items', async function(req, res, next) {
 })
 
 router.delete('/items/:item_id', async function (req, res, next) {
-    await SoldIn.destroy({
-        where: { item_item_id: req.params.item_id }
-    }).catch(next);
     await Items.destroy({ 
         where: { item_id: req.params.item_id } 
+    }).then((result) => {
+        return SoldIn.destroy({
+            where: { item_item_id: req.params.item_id }
+        })
     }).then((result) => {
         return Items.findAll({ include: [SoldIn] })
     }).then((result) => {
